@@ -1,4 +1,4 @@
-package io.github.wizwix;
+package io.github.wizwix.letsfutsal;
 
 public class Main {
   // Placeholder class: To be deleted
