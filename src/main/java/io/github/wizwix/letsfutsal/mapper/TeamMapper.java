@@ -15,25 +15,17 @@ public interface TeamMapper {
 	
   int addMemberToTeam(@Param("teamId") long teamId, @Param("userId") long userId);
 
-  @Insert("""
-	        INSERT INTO team
-	        (team_name, gender, min_grade, max_grade, region, introduction)
-	        VALUES
-	        (#{teamName}, #{gender}, #{minGrade}, #{maxGrade}, #{region}, #{introduction})
-	    """)
-  int insertTeam(TeamDTO team);
+  int insertTeam(@Param("team") TeamDTO team);
 
-  int removeMemberToTeam(@Param("teamId") long teamId, @Param("userId") long userId);
+  int removeMemberFromTeam(@Param("teamId") long teamId, @Param("userId") long userId);
 
-  List<UserDTO> selectMembersByTeamId(long teamId);
+  List<UserDTO> selectMembersByTeamId(@Param("teamId") long teamId);
 
-  @Select("SELECT * FROM team WHERE team_id = #{teamId}")
-  TeamDTO selectTeamById(long teamId);
+  TeamDTO selectTeamById(@Param("teamId") long teamId);
 
-  List<TeamDTO> selectTeamsByRegion(String region);
+  List<TeamDTO> selectTeamsByRegion(@Param("region") String region);
+
+  int updateTeam(@Param("team") TeamDTO team);
   
-  @Select("SELECT * FROM team")
   List<TeamDTO> selectAllTeams();
-
-  int updateTeam(TeamDTO team);
 }
