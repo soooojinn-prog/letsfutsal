@@ -11,21 +11,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TeamService {
 
-    private final TeamMapper teamMapper;
-    
-    public TeamService(TeamMapper teamMapper) {
-        this.teamMapper = teamMapper;
-    }
+  private final TeamMapper teamMapper;
 
-    public void create(TeamDTO team) {
-        teamMapper.insertTeam(team);
-    }
+  public void create(TeamDTO team) {
+    teamMapper.insertTeam(team);
+  }
 
-    public List<TeamDTO> list() {
-        return teamMapper.selectAllTeams();
-    }
+  public TeamDTO get(long teamId) {
+    return teamMapper.selectTeamById(teamId);
+  }
 
-    public TeamDTO get(long teamId) {
-        return teamMapper.selectTeamById(teamId);
-    }
+  public List<TeamDTO> list() {
+    return teamMapper.selectAllTeams();
+  }
 }

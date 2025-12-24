@@ -25,6 +25,8 @@
     insert into `letsfutsal`.`free_board_comment` (`article_id`, `author_id`, `parent_id`, `content`)
     values (#{comment.articleId}, #{comment.authorId}, #{comment.parentId}, #{comment.content})
   </insert>
+  <!-- TODO: selectArticles -->
+  <!-- TODO: selectArticlesById and other things requires author's nickname -->
   <select id="selectArticleById" parameterType="long" resultType="io.github.wizwix.letsfutsal.dto.ArticleDTO">
     select *
     from `letsfutsal`.`free_board`
