@@ -1,24 +1,31 @@
 package io.github.wizwix.letsfutsal.config;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
+import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("io.github.wizwix.letsfutsal")
 public class WebConfig implements WebMvcConfigurer {
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
+  }
+
   @Bean
   public InternalResourceViewResolver viewResolver() {
-    InternalResourceViewResolver vr = new InternalResourceViewResolver();
-    vr.setPrefix("/WEB-INF/views/");
-    vr.setSuffix(".jsp");
+    InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+    resolver.setPrefix("/WEB-INF/views/");
+    resolver.setSuffix(".jsp");
 
-    vr.setViewClass(org.springframework.web.servlet.view.JstlView.class);
-    return vr;
+    resolver.setViewClass(JstlView.class);
+
+    return resolver;
   }
 }
