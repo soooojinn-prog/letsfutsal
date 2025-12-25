@@ -11,7 +11,6 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 @Configuration
 @EnableWebMvc
 @ComponentScan("io.github.wizwix.letsfutsal")
-@MapperScan("io.github.wizwix.letsfutsal.mapper")
 public class WebConfig implements WebMvcConfigurer {
   @Bean
   public InternalResourceViewResolver viewResolver() {

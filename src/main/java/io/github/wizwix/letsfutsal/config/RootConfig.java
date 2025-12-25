@@ -6,6 +6,8 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
@@ -29,6 +31,8 @@ public class RootConfig {
   public SqlSessionFactory sqlSessionFactory(DataSource ds) throws Exception {
     SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
     factory.setDataSource(ds);
+    Resource configLocation = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis-config.xml");
+    factory.setConfigLocation(configLocation);
     return factory.getObject();
   }
 }
