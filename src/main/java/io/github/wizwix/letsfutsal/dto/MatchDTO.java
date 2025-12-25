@@ -2,9 +2,11 @@ package io.github.wizwix.letsfutsal.dto;
 
 import io.github.wizwix.letsfutsal.enums.Gender;
 import io.github.wizwix.letsfutsal.enums.Match;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Data
 public class MatchDTO {
   Gender gender;
   LocalDateTime matchDateTime;
