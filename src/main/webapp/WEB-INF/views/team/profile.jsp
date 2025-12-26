@@ -19,9 +19,7 @@ return;
 <title>팀 개별 페이지</title>
 </head>
 <body>
-
   <h2>${team.teamName}</h2>
-
   성별 :
   <c:choose>
     <c:when test="${team.gender == 'FEMALE'}">여성</c:when>
@@ -45,10 +43,8 @@ return;
   지역 : ${team.region}<br>
   소개 : <p>${team.introduction}</p>
   팀 주장 : <%=team.getLeaderId()%><br>
-
   <a href="${pageContext.request.contextPath}/team">메인으로</a> &nbsp; | &nbsp;
   <a href="${pageContext.request.contextPath}/team/join/${team.teamId}">${team.teamName} 팀 가입하기</a>
 <%-- 	<a href="${pageContext.request.contextPath}/team/list">목록으로</a> --%>
-
 </body>
 </html>

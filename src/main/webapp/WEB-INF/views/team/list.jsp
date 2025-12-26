@@ -9,7 +9,6 @@
 <title>팀 전체 목록</title>
 </head>
 <body>
-
   <h2>팀 전체 목록</h2>
   <ul>
     <%
@@ -31,6 +30,5 @@
   </ul>
   <br>
   <a href="<%=request.getContextPath()%>/team">메인으로</a>
-
 </body>
 </html>
