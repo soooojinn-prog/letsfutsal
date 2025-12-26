@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.controller;
+package io.github.wizwix.letsfutsal.team;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

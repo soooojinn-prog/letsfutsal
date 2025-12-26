@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.repository;
+package io.github.wizwix.letsfutsal.team;
 
 import io.github.wizwix.letsfutsal.dto.TeamDTO;
 
@@ -13,17 +13,18 @@ public class TeamRepository {
     return teams;
   }
 
-  public TeamDTO findById(String team_id) {
-    for (TeamDTO t : teams) {
-      if (t.getTeamId() == t.getTeamId()) {
-        // FIXME
-        return t;
-      }
-    }
-    return null;
-  }
+	public TeamDTO findById(String teamId) {
+		long id = Long.parseLong(teamId);
 
-  public void save(TeamDTO team) {
+		for (TeamDTO t : teams) {
+			if (t.getTeamId() == id) {
+				return t;
+			}
+		}
+		return null;
+	}
+
+	public void save(TeamDTO team) {
     teams.add(team);
   }
 }

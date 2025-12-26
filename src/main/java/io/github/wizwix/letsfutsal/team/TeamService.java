@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.service;
+package io.github.wizwix.letsfutsal.team;
 
 import io.github.wizwix.letsfutsal.dto.TeamDTO;
 import io.github.wizwix.letsfutsal.mapper.TeamMapper;
