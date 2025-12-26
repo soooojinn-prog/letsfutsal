@@ -6,7 +6,6 @@
 <title>팀 메인</title>
 </head>
 <body>
-
   <h2>팀 관리</h2>
   <form action="<%=request.getContextPath()%>/team/list" method="get">
     <button type="submit">모든 팀 보기</button>
@@ -15,6 +14,5 @@
   <form action="<%=request.getContextPath()%>/team/create" method="get">
     <button type="submit">팀 생성하기</button>
   </form>
-
 </body>
 </html>
