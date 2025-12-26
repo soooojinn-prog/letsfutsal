@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.service;
+package io.github.wizwix.letsfutsal.user;
 
 import io.github.wizwix.letsfutsal.dto.UserDTO;
 import io.github.wizwix.letsfutsal.mapper.UserMapper;
@@ -26,6 +26,8 @@ public class UserService implements IUserService {
     UserDTO user = userMapper.selectUserByEmail(email);
     if (user != null && user.getPassword().equals(password)) return user;
     return null;
+    
+    
   }
 
   @Override

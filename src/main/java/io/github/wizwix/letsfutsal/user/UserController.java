@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.controller;
+package io.github.wizwix.letsfutsal.user;
 
 import io.github.wizwix.letsfutsal.dto.UserDTO;
 import io.github.wizwix.letsfutsal.service.UserService;

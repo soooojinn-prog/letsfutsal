@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.controller;
+package io.github.wizwix.letsfutsal.board;
 
 import io.github.wizwix.letsfutsal.dto.ArticleDTO;
 import io.github.wizwix.letsfutsal.mapper.BoardMapper;

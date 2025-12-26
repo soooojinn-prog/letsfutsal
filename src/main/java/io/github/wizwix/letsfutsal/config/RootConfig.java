@@ -38,7 +38,7 @@ public class RootConfig {
     factory.setDataSource(ds);
 
     // MyBatis 설정
-    Resource configLocation = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis-config.xml");
+    Resource configLocation = new PathMatchingResourcePatternResolver().getResource("classpath:mybatis/mybatis_config.xml");
     factory.setConfigLocation(configLocation);
 
     return factory.getObject();

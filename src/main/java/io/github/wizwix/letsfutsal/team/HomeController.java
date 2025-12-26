@@ -1,4 +1,4 @@
-package io.github.wizwix.letsfutsal.controller;
+package io.github.wizwix.letsfutsal.team;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
