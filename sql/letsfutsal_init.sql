@@ -16,19 +16,20 @@ set foreign_key_checks = 1;
 -- 회원
 create table letsfutsal.user
 (
-  user_id            bigint auto_increment,                                        -- [PK] 1부터 시작
-  email              varchar(100)            not null,
-  password           varchar(255)            not null,
-  nickname           varchar(30)             not null,
-  created_at         datetime                         default current_timestamp(), -- 계정 생성일 (자동 생성)
-  gender             enum ('MALE', 'FEMALE') not null,
-  preferred_position varchar(30)             null,                                 -- 선호 포지션
-  introduction       text                    null,                                 -- 자기 소개
-  point              bigint                  not null default 0,                   -- 누적 경험치 포인트
-  grade              int                     not null default 0,                   -- 변동 가능한 실력 등급 (0 ~ 3)
+  user_id            bigint auto_increment,                                              -- [PK] 1부터 시작
+  email              varchar(100)                  not null,
+  password           varchar(255)                  not null,
+  nickname           varchar(30)                   not null,
+  created_at         datetime                               default current_timestamp(), -- 계정 생성일 (자동 생성)
+  gender             enum ('MALE', 'FEMALE')       not null,
+  preferred_position enum ('DF', 'FW', 'GK', 'MF') null,                                 -- 가장 선호하는 포지션 (DF:수비수,픽소 | FW:공격수,피보 | GK:골키퍼,골레이로 | MF:미드필더,아라)
+  introduction       text                          null,                                 -- 자기 소개
+  point              bigint                        not null default 0,                   -- 누적 경험치 포인트
+  grade              int                           not null default 0,                   -- 변동 가능한 실력 등급 (0 ~ 3)
   constraint pk_user primary key (user_id),
   constraint uk_user_email unique (email),
-  constraint uk_user_nickname unique (nickname)
+  constraint uk_user_nickname unique (nickname),
+  constraint chk_user_grade check (grade between 0 and 3)
 );
 
 -- 팀
@@ -37,7 +38,7 @@ create table letsfutsal.team
   team_id      bigint auto_increment,                -- [PK] 1부터 시작
   team_name    varchar(100)                    not null,
   leader_id    bigint                          not null,
-  gender       enum ('MALE', 'FEMALE', 'BOTH') null,
+  gender       enum ('MALE', 'FEMALE', 'BOTH') null, -- 회원 성별
   min_grade    int                             null, -- (0 ~ 3)
   max_grade    int                             null, -- (0 ~ 3)
   region       varchar(100)                    null, -- 개략적인 지역 (서울, 충북 등)
@@ -75,6 +76,29 @@ create table letsfutsal.entity
     )
 );
 
+-- 트리거: entity 테이블은 user 혹은 team에 새 줄이 추가될 때 자동으로 새 줄이 추가됨 (자동 삭제 없음)
+delimiter //
+create definer = letsfutsal@localhost trigger trg_user_after_insert
+  after insert
+  on letsfutsal.user
+  for each row
+begin
+  insert into letsfutsal.entity (entity_type, user_id, team_id)
+  values ('USER', NEW.user_id, null);
+end//
+
+create definer = letsfutsal@localhost trigger trg_team_after_insert
+  after insert
+  on letsfutsal.team
+  for each row
+begin
+  insert into letsfutsal.entity (entity_type, user_id, team_id)
+  values ('TEAM', null, NEW.team_id);
+  insert into letsfutsal.team_member (team_id, user_id)
+  values (NEW.team_id, NEW.leader_id);
+end//
+delimiter ;
+
 -- 구장
 create table letsfutsal.stadium
 (
@@ -91,15 +115,17 @@ create table letsfutsal.stadium
 -- 경기 (개인, 팀, 대여 모두 포함)
 create table letsfutsal.game_match
 (
-  match_id         bigint auto_increment,                        -- [PK] 1부터 시작
+  match_id         bigint auto_increment,                                  -- [PK] 1부터 시작
   stadium_id       bigint                              not null,
   renter_entity_id bigint                              null,
   match_type       enum ('INDIVIDUAL', 'TEAM', 'RENT') not null,
-  match_datetime   datetime                            not null,
+  match_date       date                                not null,           -- 경기일
+  start_hour       time                                not null,           -- 경기 시작 시각
+  end_hour         time                                not null,           -- 경기 종료 시각
   gender           enum ('MALE', 'FEMALE', 'BOTH')     not null,
-  min_grade        int                                 not null, -- (0 ~ 3)
-  max_grade        int                                 not null, -- (0 ~ 3)
-  status           tinyint                             not null default 0,
+  min_grade        int                                 not null,           -- (0 ~ 3)
+  max_grade        int                                 not null,           -- (0 ~ 3)
+  status           tinyint                             not null default 0, -- 경기 참여 인원 (0 ~ 10)
   constraint pk_gm primary key (match_id),
   constraint fk_gm_stadium_sid foreign key (stadium_id) references letsfutsal.stadium (stadium_id),
   constraint fk_gm_entity_reid foreign key (renter_entity_id) references letsfutsal.entity (entity_id)
@@ -115,6 +141,29 @@ create table letsfutsal.match_individual_players
   constraint fk_mip_user_uid foreign key (user_id) references letsfutsal.user (user_id)
 );
 
+-- 트리거: match_individual_players가 변경될 때 game_match.status 변경
+delimiter //
+create definer = letsfutsal@localhost trigger trg_match_individual_after_insert
+  after insert
+  on letsfutsal.match_individual_players
+  for each row
+begin
+  update letsfutsal.game_match
+  set status = status + 1
+  where match_id = NEW.match_id;
+end//
+
+create definer = letsfutsal@localhost trigger trg_match_individual_after_delete
+  after delete
+  on letsfutsal.match_individual_players
+  for each row
+begin
+  update letsfutsal.game_match
+  set status = status - 1
+  where match_id = OLD.match_id;
+end//
+delimiter ;
+
 -- 팀 경기
 create table letsfutsal.match_team_participants
 (
@@ -124,6 +173,29 @@ create table letsfutsal.match_team_participants
   constraint fk_mtp_gm_mid foreign key (match_id) references letsfutsal.game_match (match_id),
   constraint fk_mtp_team_tid foreign key (team_id) references letsfutsal.team (team_id)
 );
+
+-- 트리거: match_team_participants가 변경될 때 game_match.status 변경
+delimiter //
+create definer = letsfutsal@localhost trigger trg_match_team_after_insert
+  after insert
+  on letsfutsal.match_team_participants
+  for each row
+begin
+  update letsfutsal.game_match
+  set status = status + 5
+  where match_id = NEW.match_id;
+end//
+
+create definer = letsfutsal@localhost trigger trg_match_team_after_delete
+  after delete
+  on letsfutsal.match_team_participants
+  for each row
+begin
+  update letsfutsal.game_match
+  set status = status - 5
+  where match_id = OLD.match_id;
+end//
+delimiter ;
 
 -- 자유 게시판 카테고리
 create table letsfutsal.free_board_category
@@ -163,24 +235,3 @@ create table letsfutsal.free_board_comment
   constraint fk_fbc_fb_artiid foreign key (article_id) references letsfutsal.free_board (article_id) on delete cascade,
   constraint fk_fbc_user_authid foreign key (author_id) references letsfutsal.user (user_id)
 );
-
--- 트리거
-delimiter //
-create definer = letsfutsal@localhost trigger trg_user_after_insert
-  after insert
-  on letsfutsal.user
-  for each row
-begin
-  insert into letsfutsal.entity (entity_type, user_id, team_id)
-  values ('USER', NEW.user_id, null);
-end//
-
-create definer = letsfutsal@localhost trigger trg_team_after_insert
-  after insert
-  on letsfutsal.team
-  for each row
-begin
-  insert into letsfutsal.entity (entity_type, user_id, team_id)
-  values ('TEAM', null, NEW.team_id);
-end//
-delimiter ;

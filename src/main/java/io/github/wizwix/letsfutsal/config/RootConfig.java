@@ -8,10 +8,14 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import javax.sql.DataSource;
 
@@ -30,6 +34,12 @@ public class RootConfig {
     config.setMaximumPoolSize(20);
 
     return new HikariDataSource(config);
+  }
+
+  @Bean
+  @Primary
+  public JsonMapper jsonMapper() {
+    return JsonMapper.builder().addModule(new JavaTimeModule()).disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS).build();
   }
 
   @Bean

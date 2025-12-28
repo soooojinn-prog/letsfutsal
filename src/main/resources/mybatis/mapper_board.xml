@@ -39,11 +39,10 @@
     order by fb.created_at desc
   </select>
   <select id="selectArticlesByAuthorNickname" parameterType="string" resultType="io.github.wizwix.letsfutsal.dto.ArticleDTO">
-    <bind name="pattern" value="'%' + nickname + '%'"/>
     select fb.*, u.nickname
     from letsfutsal.free_board fb
            join letsfutsal.user u on fb.author_id = u.user_id
-    where u.nickname like #{pattern}
+    where u.nickname like concat('%', #{nickname}, '%')
     order by fb.created_at desc
   </select>
   <select id="selectArticlesByCategoryId" parameterType="long" resultType="io.github.wizwix.letsfutsal.dto.ArticleDTO">
@@ -54,28 +53,25 @@
     order by fb.created_at desc
   </select>
   <select id="selectArticlesByCommentContent" parameterType="string" resultType="io.github.wizwix.letsfutsal.dto.ArticleDTO">
-    <bind name="pattern" value="'%' + commentContent + '%'"/>
     select distinct fb.*, u.nickname
     from letsfutsal.free_board fb
            join letsfutsal.free_board_comment fbc on fb.article_id = fbc.article_id
            join letsfutsal.user u on fb.author_id = u.user_id
-    where fbc.content like #{pattern}
+    where fbc.content like concat('%', #{commentContent}, '%')
     order by fb.created_at desc
   </select>
   <select id="selectArticlesByContent" parameterType="string" resultType="io.github.wizwix.letsfutsal.dto.ArticleDTO">
-    <bind name="pattern" value="'%' + content + '%'"/>
     select fb.*, u.nickname
     from letsfutsal.free_board fb
            join letsfutsal.user u on fb.author_id = u.user_id
-    where fb.content like #{pattern}
+    where fb.content like concat('%', #{content}, '%')
     order by fb.created_at desc
   </select>
   <select id="selectArticlesByTitle" parameterType="string" resultType="io.github.wizwix.letsfutsal.dto.ArticleDTO">
-    <bind name="pattern" value="'%' + title + '%'"/>
     select fb.*, u.nickname
     from letsfutsal.free_board fb
            join letsfutsal.user u on fb.author_id = u.user_id
-    where fb.title like #{pattern}
+    where fb.title like concat('%', #{title}, '%')
     order by fb.created_at desc
   </select>
   <select id="selectCommentsByArticleId" parameterType="long" resultType="io.github.wizwix.letsfutsal.dto.CommentDTO">

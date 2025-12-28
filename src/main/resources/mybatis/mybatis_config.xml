@@ -2,8 +2,15 @@
 <!DOCTYPE configuration PUBLIC "//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
 <configuration>
   <settings>
+    <setting name="jdbcTypeForNull" value="NULL"/>
     <setting name="mapUnderscoreToCamelCase" value="true"/>
   </settings>
+  <typeHandlers>
+    <typeHandler javaType="io.github.wizwix.letsfutsal.enums.EntityType" handler="io.github.wizwix.letsfutsal.enums.EntityTypeTypeHandler"/>
+    <typeHandler javaType="io.github.wizwix.letsfutsal.enums.Gender" handler="io.github.wizwix.letsfutsal.enums.GenderTypeHandler"/>
+    <typeHandler javaType="io.github.wizwix.letsfutsal.enums.Match" handler="io.github.wizwix.letsfutsal.enums.MatchTypeHandler"/>
+    <typeHandler javaType="io.github.wizwix.letsfutsal.enums.PreferredPosition" handler="io.github.wizwix.letsfutsal.enums.PreferredPositionTypeHandler"/>
+  </typeHandlers>
   <mappers>
     <mapper resource="mybatis/mapper_board.xml"/>
     <mapper resource="mybatis/mapper_entity.xml"/>

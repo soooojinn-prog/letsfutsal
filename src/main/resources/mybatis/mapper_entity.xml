@@ -13,11 +13,11 @@
     where user_id = #{userId}
       and entity_type = 'USER'
   </select>
-  <insert id="insertTeamEntity" parameterType="long">
+  <insert id="insertTeamEntity" parameterType="long" useGeneratedKeys="true" keyProperty="long">
     insert into letsfutsal.entity (entity_type, team_id)
     values ('TEAM', #{teamId})
   </insert>
-  <insert id="insertUserEntity" parameterType="long">
+  <insert id="insertUserEntity" parameterType="long" useGeneratedKeys="true" keyProperty="long">
     insert into letsfutsal.entity (entity_type, user_id)
     values ('USER', #{userId})
   </insert>

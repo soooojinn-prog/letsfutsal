@@ -1,0 +1,28 @@
+header.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.site-logo img {
+  height: 44px;
+  display: block;
+}
+
+.user-links p {
+  margin: 0;
+  line-height: 1;
+  font-size: 0.95rem;
+}
+
+nav.main-nav {
+  border-bottom: 1px solid #e9ecef;
+  background-color: #fff;
+}
+
+nav.main-nav .nav-link {
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+}

@@ -6,17 +6,39 @@
     values (#{matchId}, #{userId})
   </insert>
   <insert id="insertMatch" parameterType="io.github.wizwix.letsfutsal.dto.MatchDTO" useGeneratedKeys="true" keyProperty="match.matchId">
-    insert into letsfutsal.game_match (stadium_id, renter_entity_id, match_type, match_datetime, gender, min_grade, max_grade, status)
-    values (#{match.stadiumId}, #{match.renterEntityId}, #{match.matchType}, #{match.matchDateTime}, #{match.gender}, #{match.minGrade}, #{match.maxGrade}, #{match.status})
+    insert into letsfutsal.game_match (stadium_id, renter_entity_id, match_type, match_date, start_hour, end_hour, gender, min_grade, max_grade, status)
+    values (#{match.stadiumId}, #{match.renterEntityId}, #{match.matchType}, #{match.matchDate}, #{match.startHour}, #{match.endHour}, #{match.gender}, #{match.minGrade}, #{match.maxGrade}, #{match.status})
   </insert>
   <insert id="insertTeamParticipant">
     insert into letsfutsal.match_team_participants (match_id, team_id)
     values (#{matchId}, #{teamId})
   </insert>
+  <update id="modifyMatchStatus">
+    update letsfutsal.game_match
+    set status = status + #{increment}
+    where match_id = #{matchId}
+  </update>
   <select id="selectMatchById" parameterType="long" resultType="io.github.wizwix.letsfutsal.dto.MatchDTO">
     select *
     from letsfutsal.game_match
     where match_id = #{matchId}
+  </select>
+  <select id="selectMatchesByFilters" resultType="io.github.wizwix.letsfutsal.dto.MatchDTO">
+    select m.*, s.name as stadium_name, s.region
+    from letsfutsal.game_match m
+           join letsfutsal.stadium s on m.stadium_id = s.stadium_id
+    <where>
+      <if test="date != null">
+        and m.match_date = #{date}
+      </if>
+      <if test="region != null and region != '전체'">
+        and s.region = #{region}
+      </if>
+      <if test="type != null and type != '전체'">
+        and m.match_type = #{type}
+      </if>
+    </where>
+    order by m.start_hour
   </select>
   <select id="selectMatchesByRegionAndType" resultType="io.github.wizwix.letsfutsal.dto.MatchDTO">
     select m.*
@@ -24,6 +46,15 @@
            join letsfutsal.stadium s on m.stadium_id = s.stadium_id
     where s.region = #{region}
       and m.match_type = #{type}
+  </select>
+  <select id="selectUpcomingMatches" resultType="io.github.wizwix.letsfutsal.dto.MatchDTO">
+    <![CDATA[
+    select *
+    from letsfutsal.game_match
+    where timestamp(match_date, start_hour) >= now()
+      and match_date < date_add(curdate(), interval 8 day)
+    order by status, match_date
+    ]]>
   </select>
   <update id="updateMatchStatus">
     update letsfutsal.game_match
