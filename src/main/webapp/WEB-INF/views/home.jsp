@@ -75,13 +75,22 @@
   <section class="container-fluid p-0">
     <div class="f-carousel w-100" id="banners" role="region">
       <div class="f-carousel__slide">
-        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_01.png" class="img-fluid w-100" alt="Banner 1">
+        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_01.png" class="img-fluid d-block mx-auto" alt="Banner 1">
       </div>
       <div class="f-carousel__slide">
-        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_02.png" class="img-fluid w-100" alt="Banner 2">
+        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_02.jpg" class="img-fluid d-block mx-auto" alt="Banner 2">
       </div>
       <div class="f-carousel__slide">
-        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_03.png" class="img-fluid w-100" alt="Banner 3">
+        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_03.png" class="img-fluid d-block mx-auto" alt="Banner 3">
+      </div>
+      <div class="f-carousel__slide">
+        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_04.jpg" class="img-fluid d-block mx-auto" alt="Banner 4">
+      </div>
+      <div class="f-carousel__slide">
+        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_05.png" class="img-fluid d-block mx-auto" alt="Banner 5">
+      </div>
+      <div class="f-carousel__slide">
+        <img src="${pageContext.request.contextPath}/resources/image/banner/banner_06.jpg" class="img-fluid d-block mx-auto" alt="Banner 6">
       </div>
     </div>
   </section>

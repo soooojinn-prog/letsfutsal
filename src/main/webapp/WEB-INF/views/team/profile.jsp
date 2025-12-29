@@ -60,7 +60,7 @@
   <p>${team.introduction}</p>
   팀 주장 : ${team.leaderNickname}<br><br>
   <!-- 버튼 하나만 사용 -->
-	<button type="button" onclick="joinTeam()">팀 가입하기</button>
+  <button type="button" onclick="joinTeam()">팀 가입하기</button>
   <br><br>
   <a href="${pageContext.request.contextPath}/team/list">← 팀 목록으로</a>
 </body>
