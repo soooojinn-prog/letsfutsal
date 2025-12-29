@@ -1,20 +1,38 @@
 package io.github.wizwix.letsfutsal.dto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Objects;
 
 @SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})
 public class ArticleDTO {
   long articleId;
   long authorId;
+  String authorNickname;
   long cateId;
+  String cateName;
   String content;
   LocalDateTime createdAt;
-  String nickname;
   String title;
   long views;
 
   public ArticleDTO() {}
+
+  public String getCateName() {return cateName;}
+
+  public void setCateName(String cateName) {this.cateName = cateName;}
+
+  public Date getCreatedAtAsDate() {
+    if (createdAt == null) return null;
+    return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
+  public String getCreatedAtFormatted() {
+    if (createdAt == null) return "";
+    return createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+  }
 
   public int hashCode() {
     final int PRIME = 59;
@@ -29,7 +47,7 @@ public class ArticleDTO {
     result = result * PRIME + ($content == null ? 43 : $content.hashCode());
     final Object $createdAt = this.getCreatedAt();
     result = result * PRIME + ($createdAt == null ? 43 : $createdAt.hashCode());
-    final Object $nickname = this.getNickname();
+    final Object $nickname = this.getAuthorNickname();
     result = result * PRIME + ($nickname == null ? 43 : $nickname.hashCode());
     final Object $title = this.getTitle();
     result = result * PRIME + ($title == null ? 43 : $title.hashCode());
@@ -51,8 +69,8 @@ public class ArticleDTO {
     final Object this$createdAt = this.getCreatedAt();
     final Object other$createdAt = other.getCreatedAt();
     if (!Objects.equals(this$createdAt, other$createdAt)) return false;
-    final Object this$nickname = this.getNickname();
-    final Object other$nickname = other.getNickname();
+    final Object this$nickname = this.getAuthorNickname();
+    final Object other$nickname = other.getAuthorNickname();
     if (!Objects.equals(this$nickname, other$nickname)) return false;
     final Object this$title = this.getTitle();
     final Object other$title = other.getTitle();
@@ -61,6 +79,8 @@ public class ArticleDTO {
   }
 
   protected boolean canEqual(final Object other) {return other instanceof ArticleDTO;}
+
+  public String toString() {return "ArticleDTO(articleId=" + this.getArticleId() + ", authorId=" + this.getAuthorId() + ", cateId=" + this.getCateId() + ", content=" + this.getContent() + ", createdAt=" + this.getCreatedAt() + ", nickname=" + this.getAuthorNickname() + ", title=" + this.getTitle() + ", views=" + this.getViews() + ")";}
 
   public long getArticleId() {return this.articleId;}
 
@@ -82,9 +102,9 @@ public class ArticleDTO {
 
   public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 
-  public String getNickname() {return this.nickname;}
+  public String getAuthorNickname() {return this.authorNickname;}
 
-  public void setNickname(String nickname) {this.nickname = nickname;}
+  public void setAuthorNickname(String authorNickname) {this.authorNickname = authorNickname;}
 
   public String getTitle() {return this.title;}
 
@@ -93,6 +113,4 @@ public class ArticleDTO {
   public long getViews() {return this.views;}
 
   public void setViews(long views) {this.views = views;}
-
-  public String toString() {return "ArticleDTO(articleId=" + this.getArticleId() + ", authorId=" + this.getAuthorId() + ", cateId=" + this.getCateId() + ", content=" + this.getContent() + ", createdAt=" + this.getCreatedAt() + ", nickname=" + this.getNickname() + ", title=" + this.getTitle() + ", views=" + this.getViews() + ")";}
 }

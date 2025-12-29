@@ -35,6 +35,23 @@
     from letsfutsal.team
     where region = #{region}
   </select>
+  <select id="selectTopTeamsByGrade" parameterType="int" resultType="io.github.wizwix.letsfutsal.rank.TeamRankDTO">
+        select t.team_id      as teamId,
+           t.team_name        as teamName,
+           t.region           as region,
+           sum(u.point)       as totalPoints,
+           avg(u.point)       as averagePoints,
+           count(tm.user_id)  as memberCount
+    from letsfutsal.team t
+           join letsfutsal.team_member tm on t.team_id = tm.team_id
+           join letsfutsal.user u on tm.user_id = u.user_id
+    <if test="grade != -1">
+      where t.min_grade &lt;= #{grade} and t.max_grade &gt;= #{grade}
+    </if>
+    group by t.team_id, t.team_name, t.region
+    order by averagePoints desc, t.team_id
+    limit 10
+  </select>
   <update id="updateTeam" parameterType="io.github.wizwix.letsfutsal.dto.TeamDTO">
     update letsfutsal.team
     set team_name    = #{team.teamName},

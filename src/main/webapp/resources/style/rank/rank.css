@@ -1,0 +1,17 @@
+/* 순위 메달 색상 */
+.rank-number {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+.gold {
+  color: #FFD700;
+}
+
+.silver {
+  color: #C0C0C0;
+}
+
+.bronze {
+  color: #CD7F32;
+}

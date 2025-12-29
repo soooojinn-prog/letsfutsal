@@ -1,6 +1,8 @@
 package io.github.wizwix.letsfutsal.team;
 
 import io.github.wizwix.letsfutsal.dto.TeamDTO;
+import io.github.wizwix.letsfutsal.dto.UserDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,12 +22,15 @@ public class TeamController {
   }
 
   @PostMapping("/create")
-  public String create(@ModelAttribute TeamDTO team) {
-    // 임시 팀장 ID (로그인 기능 전이라서 임시값)
-    team.setLeaderId(1L); // 로그인 연동 시 수정해야
-    // DB 저장
+  public String create(@ModelAttribute TeamDTO team, HttpSession session) {
+    // 1. 로그인 사용자 가져오기
+    UserDTO loginUser = (UserDTO) session.getAttribute("loginUser");
+    if (loginUser == null) return "redirect:/user/login";
+    // 2. 팀장 = 로그인한 사용자 ID
+    team.setLeaderId(loginUser.getUserId());
+    // 3. DB 저장
     service.create(team);
-    // 생성된 팀의 상세 페이지로 이동
+    // 4. 생성된 팀의 상세 페이지로 이동
     return "redirect:/team/profile/" + team.getTeamId();
   }
 
@@ -37,7 +42,7 @@ public class TeamController {
 
   // 팀 가입 페이지
   @GetMapping("/join/{teamId}")
-  public String joinForm(@PathVariable("teamId") long teamId, Model model) {
+  public String joinForm(@PathVariable long teamId, Model model) {
     model.addAttribute("team", service.get(teamId));
     return "team/join";
   }
@@ -57,7 +62,7 @@ public class TeamController {
 
   // 팀 개별 페이지
   @GetMapping("/profile/{teamId}")
-  public String profile(@PathVariable("teamId") long teamId, Model model) {
+  public String profile(@PathVariable long teamId, Model model) {
     model.addAttribute("team", service.get(teamId));
     return "team/profile";
   }

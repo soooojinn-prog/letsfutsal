@@ -2,13 +2,15 @@ package io.github.wizwix.letsfutsal.user;
 
 import io.github.wizwix.letsfutsal.dto.UserDTO;
 import io.github.wizwix.letsfutsal.mapper.UserMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class UserService implements IUserService {
   private final UserMapper userMapper;
+
+  public UserService(UserMapper userMapper) {
+    this.userMapper = userMapper;
+  }
 
   @Override
   public UserDTO getUserById(Long userId) {

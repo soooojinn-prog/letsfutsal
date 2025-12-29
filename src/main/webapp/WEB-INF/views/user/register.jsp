@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,9 +6,9 @@
   <title>Register - Let's Futsal</title>
   <script>
   function validateForm() {
-    var email = document.getElementById("email").value;
-    var password = document.getElementById("password").value;
-    var confirmPassword = document.getElementById("confirmPassword").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
 
     // 비밀번호 확인
     if (password !== confirmPassword) {
@@ -17,12 +17,12 @@
     }
 
     // 이메일 중복 확인 (동기 방식)
-    var xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open("GET", "${pageContext.request.contextPath}/user/check-email?email=" + encodeURIComponent(email), false);
     xhr.send();
 
     if (xhr.status === 200) {
-      var emailExists = xhr.responseText === "true";
+      const emailExists = xhr.responseText === "true";
       if (emailExists) {
         alert("이미 사용 중인 이메일입니다!");
         return false;

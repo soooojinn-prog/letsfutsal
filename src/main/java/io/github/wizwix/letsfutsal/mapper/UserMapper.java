@@ -13,6 +13,8 @@ public interface UserMapper {
 
   List<TeamDTO> selectTeamsByUserId(@Param("userId") long userId);
 
+  List<UserDTO> selectTopUsersByGradeAndPosition(int grade, String position);
+
   UserDTO selectUserByEmail(@Param("email") String email);
 
   UserDTO selectUserById(@Param("userId") long userId);

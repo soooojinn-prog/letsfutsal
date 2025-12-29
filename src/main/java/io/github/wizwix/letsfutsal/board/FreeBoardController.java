@@ -1,8 +1,9 @@
 package io.github.wizwix.letsfutsal.board;
 
 import io.github.wizwix.letsfutsal.dto.ArticleDTO;
-import io.github.wizwix.letsfutsal.mapper.BoardMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.wizwix.letsfutsal.dto.CategoryDTO;
+import io.github.wizwix.letsfutsal.dto.CommentDTO;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,41 +12,255 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/free")
 public class FreeBoardController {
-  @Autowired
-  private BoardMapper boardMapper;
+  private static final int ARTICLES_PER_PAGE = 20;
+  private final FreeBoardService service;
 
-  // 자유 게시판 목록 및 검색
-  @GetMapping({"", "/search"})
-  public String list(@RequestParam(required = false) String query, @RequestParam(required = false) String writer, Model model) {
-    // TODO: 쿼리를 여기서 직접 해결하기? or BoardMapper 클래스와 mapper_board.xml에 쿼리 처리 방법 삽입
-    //List<FreeBoardDTO> list = boardMapper.select(query, writer);
-    //model.addAttribute("list", list);
-    return "board/list"; // JSP 또는 Thymeleaf 파일 경로
+  public FreeBoardController(FreeBoardService service) {
+    this.service = service;
   }
 
-  // 글 상세 보기
-  @GetMapping("/view/{id}")
-  public String view(@PathVariable Long id, Model model) {
-    boardMapper.incrementArticleViews(id); // 조회수 증가
-    model.addAttribute("board", boardMapper.selectArticleById(id));
-    return "board/view";
-  }
+  // 글 삭제
+  @PostMapping("/delete/{id}")
+  public String delete(@PathVariable Long id, HttpSession session) {
 
-  // 글 쓰기 처리
-  @PostMapping("/write")
-  public String write(ArticleDTO article) {
-    // 실제 프로젝트에선 세션에서 로그인한 유저 ID를 가져와 세팅해야 함
-    // board.setAuthorId(loginUserId);
-    boardMapper.insertArticle(article);
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    ArticleDTO article = service.getArticleByIdWithoutIncreasingViews(id);
+
+    if (article == null || article.getAuthorId() != userId) {
+      return "redirect:/free";
+    }
+
+    service.deleteArticle(id);
     return "redirect:/free";
   }
 
-  // 글 쓰기 페이지 이동
+  // 댓글 삭제
+  @PostMapping("/comment/delete")
+  public String deleteComment(@RequestParam Long commentId,
+                              @RequestParam Long articleId,
+                              HttpSession session) {
+
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    service.deleteComment(commentId);
+    return "redirect:/free/view/" + articleId;
+  }
+
+  // 글 수정 처리
+  @PostMapping("/edit/{id}")
+  public String edit(@PathVariable Long id,
+                     @RequestParam Long cateId,
+                     @RequestParam String title,
+                     @RequestParam String content,
+                     HttpSession session) {
+
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    ArticleDTO article = service.getArticleByIdWithoutIncreasingViews(id);
+
+    if (article == null || article.getAuthorId() != userId) {
+      return "redirect:/free";
+    }
+
+    ArticleDTO dto = new ArticleDTO();
+    dto.setArticleId(id);
+    dto.setCateId(cateId);
+    dto.setTitle(title);
+    dto.setContent(content);
+
+    boolean updated = service.updateArticle(dto);
+
+    return updated
+        ? "redirect:/free/view/" + id
+        : "redirect:/free/edit/" + id;
+  }
+
+  // 글 수정 폼
+  @GetMapping("/edit/{id}")
+  public String editForm(@PathVariable Long id,
+                         HttpSession session,
+                         Model model) {
+
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    ArticleDTO article = service.getArticleByIdWithoutIncreasingViews(id);
+
+    if (article == null || article.getAuthorId() != userId) {
+      return "redirect:/free";
+    }
+
+    List<CategoryDTO> categories = service.getAllCategories();
+
+    model.addAttribute("article", article);
+    model.addAttribute("categories", categories);
+
+    return "freeboard/edit";
+  }
+
+  // 게시글 목록 (1페이지)
+  @GetMapping
+  public String list(Model model) {
+    int totalCount = service.getTotalArticleCount();
+    int totalPages = (int) Math.ceil((double) totalCount / ARTICLES_PER_PAGE);
+
+    List<ArticleDTO> articles = service.getArticleList(0, ARTICLES_PER_PAGE);
+
+    model.addAttribute("articles", articles);
+    model.addAttribute("currentPage", 1);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalCount", totalCount);
+
+    return "freeboard/list"; // /WEB-INF/views/list.jsp
+  }
+
+  // 페이지별 목록
+  @GetMapping("/page/{page}")
+  public String listByPage(@PathVariable int page, Model model) {
+    if (page < 1) {
+      return "redirect:/free";
+    }
+
+    int totalCount = service.getTotalArticleCount();
+    int totalPages = (int) Math.ceil((double) totalCount / ARTICLES_PER_PAGE);
+
+    if (page > totalPages && totalPages > 0) {
+      return "redirect:/free/page/" + totalPages;
+    }
+
+    int offset = (page - 1) * ARTICLES_PER_PAGE;
+    List<ArticleDTO> articles = service.getArticleList(offset, ARTICLES_PER_PAGE);
+
+    model.addAttribute("articles", articles);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalCount", totalCount);
+
+    return "freeboard/list";
+  }
+
+  // 게시글 검색
+  @GetMapping("/search")
+  public String search(@RequestParam(required = false) String query,
+                       @RequestParam(required = false) String writer,
+                       @RequestParam(defaultValue = "1") int page,
+                       Model model) {
+
+    if (page < 1) page = 1;
+
+    int totalCount = service.getSearchArticleCount(query, writer);
+    int totalPages = (int) Math.ceil((double) totalCount / ARTICLES_PER_PAGE);
+
+    int offset = (page - 1) * ARTICLES_PER_PAGE;
+    List<ArticleDTO> articles = service.searchArticles(query, writer, offset, ARTICLES_PER_PAGE);
+
+    model.addAttribute("articles", articles);
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPages", totalPages);
+    model.addAttribute("totalCount", totalCount);
+    model.addAttribute("query", query);
+    model.addAttribute("writer", writer);
+
+    return "freeboard/search";
+  }
+
+  // 게시글 상세
+  @GetMapping("/view/{id}")
+  public String view(@PathVariable Long id, Model model) {
+    ArticleDTO article = service.getArticleById(id);
+    if (article == null) {
+      return "redirect:/free";
+    }
+
+    List<CommentDTO> comments = service.getCommentsByArticleId(id);
+
+    model.addAttribute("article", article);
+    model.addAttribute("comments", comments);
+
+    return "freeboard/view";
+  }
+
+  // 글쓰기 처리
+  @PostMapping("/write")
+  public String write(@RequestParam Long cateId,
+                      @RequestParam String title,
+                      @RequestParam String content,
+                      HttpSession session) {
+
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    if (title == null || title.trim().isEmpty()
+        || content == null || content.trim().isEmpty()) {
+      return "redirect:/free/write";
+    }
+
+    ArticleDTO dto = new ArticleDTO();
+    dto.setCateId(cateId);
+    dto.setAuthorId(userId);
+    dto.setTitle(title);
+    dto.setContent(content);
+
+    Long articleId = service.insertArticle(dto);
+
+    return (articleId != null)
+        ? "redirect:/free/view/" + articleId
+        : "redirect:/free/write";
+  }
+
+  // 댓글 작성
+  @PostMapping("/comment/write")
+  public String writeComment(@RequestParam Long articleId,
+                             @RequestParam(required = false) Long parentId,
+                             @RequestParam String content,
+                             HttpSession session) {
+
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    CommentDTO dto = new CommentDTO();
+    dto.setArticleId(articleId);
+    dto.setAuthorId(userId);
+    dto.setParentId(parentId);
+    dto.setContent(content);
+
+    service.insertComment(dto);
+    return "redirect:/free/view/" + articleId;
+  }
+
+  // 글쓰기 폼
   @GetMapping("/write")
-  public String writeForm() {
-    return "board/write";
+  public String writeForm(HttpSession session, Model model) {
+    Long userId = (Long) session.getAttribute("userId");
+    if (userId == null) {
+      return "redirect:/login";
+    }
+
+    List<CategoryDTO> categories =
+        service.getAllCategories();
+
+    model.addAttribute("categories", categories);
+    return "freeboard/write";
   }
 }

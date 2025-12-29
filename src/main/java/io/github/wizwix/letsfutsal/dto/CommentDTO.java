@@ -1,6 +1,8 @@
 package io.github.wizwix.letsfutsal.dto;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Objects;
 
 @SuppressWarnings({"LombokGetterMayBeUsed", "LombokSetterMayBeUsed"})
@@ -76,6 +78,11 @@ public class CommentDTO {
   public void setContent(String content) {this.content = content;}
 
   public LocalDateTime getCreatedAt() {return this.createdAt;}
+
+  public Date getCreatedAtAsDate() {
+    if (createdAt == null) return null;
+    return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+  }
 
   public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 

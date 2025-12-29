@@ -13,18 +13,16 @@
   <ul>
     <%
     List<TeamDTO> teams = (List<TeamDTO>) request.getAttribute("teams");
-
     if (teams == null || teams.isEmpty()) {
     %>
     <li>등록된 팀이 없습니다.</li>
     <%
     } else {
-    for (TeamDTO t : teams) {
+      for (TeamDTO t : teams) {
     %>
-    <li><a
-      href="<%=request.getContextPath()%>/team/profile/<%=t.getTeamId()%>"><%=t.getTeamName()%></a></li>
+    <li><a href="<%=request.getContextPath()%>/team/profile/<%=t.getTeamId()%>"><%=t.getTeamName()%></a></li>
     <%
-    }
+      }
     }
     %>
   </ul>

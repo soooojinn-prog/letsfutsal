@@ -2,8 +2,8 @@ package io.github.wizwix.letsfutsal.user;
 
 import io.github.wizwix.letsfutsal.dto.UserDTO;
 import jakarta.servlet.http.HttpSession;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-@Slf4j
 @Controller
 @RequestMapping("/user")
-@RequiredArgsConstructor
 public class UserController {
+  private static final Logger log = LoggerFactory.getLogger(UserController.class);
   private final UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
   @GetMapping("/check-email")
   @ResponseBody

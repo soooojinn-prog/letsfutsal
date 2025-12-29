@@ -10,7 +10,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TeamService {
-
   private final TeamMapper teamMapper;
 
   public void create(TeamDTO team) {

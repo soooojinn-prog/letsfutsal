@@ -2,6 +2,7 @@ package io.github.wizwix.letsfutsal.mapper;
 
 import io.github.wizwix.letsfutsal.dto.TeamDTO;
 import io.github.wizwix.letsfutsal.dto.UserDTO;
+import io.github.wizwix.letsfutsal.rank.TeamRankDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,6 +23,8 @@ public interface TeamMapper {
   List<TeamDTO> selectTeams();
 
   List<TeamDTO> selectTeamsByRegion(@Param("region") String region);
+
+  List<TeamRankDTO> selectTopTeamsByGrade(@Param("grade") int grade);
 
   int updateTeam(@Param("team") TeamDTO team);
 }
