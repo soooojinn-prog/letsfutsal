@@ -1,6 +1,7 @@
 package io.github.wizwix.letsfutsal.match;
 
 import io.github.wizwix.letsfutsal.dto.MatchDTO;
+import io.github.wizwix.letsfutsal.enums.Match;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -53,8 +54,7 @@ public class MatchService {
       }
     }
 
-    return matchRepository.getMatchList(matchType, stadiumName, startDateTime, endDateTime,
-        genderParam, minGrade, maxGrade, available);
+    return matchRepository.getMatchList(Match.valueOf(matchType), stadiumName, startDateTime, endDateTime, genderParam, minGrade, maxGrade, available);
   }
 }
 

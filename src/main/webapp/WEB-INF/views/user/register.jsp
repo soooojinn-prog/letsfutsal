@@ -64,10 +64,10 @@
       <label for="preferredPosition">선호 포지션 : </label>
       <select id="preferredPosition" name="preferredPosition">
         <option value="">선택안함</option>
-        <option value="Goalkeeper">골키퍼 (GK)</option>
-        <option value="Defender">수비수 (DF)</option>
-        <option value="Midfielder">미드필더 (MF)</option>
-        <option value="Forward">공격수 (FW)</option>
+        <option value="GK">골키퍼 (GK)</option>
+        <option value="DF">수비수 (DF)</option>
+        <option value="MF">미드필더 (MF)</option>
+        <option value="FW">공격수 (FW)</option>
       </select>
     </div>
     <div>

@@ -4,15 +4,14 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
-
   @Override
   protected Class<?>[] getRootConfigClasses() {
-    return new Class<?>[]{RootConfig.class};
+    return new Class<?>[]{RootConfig.class, WebConfig.class};
   }
 
   @Override
   protected Class<?>[] getServletConfigClasses() {
-    return new Class<?>[]{WebConfig.class};
+    return null;
   }
 
   @Override

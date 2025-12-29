@@ -8,10 +8,12 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import tools.jackson.databind.cfg.DateTimeFeature;
 import tools.jackson.databind.json.JsonMapper;
@@ -20,7 +22,13 @@ import tools.jackson.datatype.jsr310.JavaTimeModule;
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(basePackages = "io.github.wizwix.letsfutsal")
+@ComponentScan(
+    basePackages = "io.github.wizwix.letsfutsal",
+    excludeFilters = @ComponentScan.Filter(
+        type = FilterType.ANNOTATION,
+        classes = Controller.class
+    )
+)
 @MapperScan("io.github.wizwix.letsfutsal.mapper")
 @EnableTransactionManagement
 public class RootConfig {

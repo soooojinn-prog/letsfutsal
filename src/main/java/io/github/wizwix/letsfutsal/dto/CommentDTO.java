@@ -14,7 +14,7 @@ public class CommentDTO {
   LocalDateTime createdAt;
   boolean isDeleted;
   String nickname;
-  long parentId;
+  Long parentId;
 
   public CommentDTO() {}
 

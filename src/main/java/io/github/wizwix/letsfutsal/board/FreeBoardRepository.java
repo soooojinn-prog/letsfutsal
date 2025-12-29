@@ -1,7 +1,6 @@
 package io.github.wizwix.letsfutsal.board;
 
 import io.github.wizwix.letsfutsal.dto.ArticleDTO;
-import io.github.wizwix.letsfutsal.dto.ArticleDTO;
 import io.github.wizwix.letsfutsal.dto.CategoryDTO;
 import io.github.wizwix.letsfutsal.dto.CommentDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +17,7 @@ import java.util.List;
 
 @Repository
 public class FreeBoardRepository {
-  @Autowired
   private JdbcTemplate jdbcTemplate;
-
-//  public FreeBoardRepository(JdbcTemplate jdbcTemplate) {
-//    this.jdbcTemplate = jdbcTemplate;
-//  }
 
   private final RowMapper<ArticleDTO> articleRowMapper = (rs, rowNum) -> {
     ArticleDTO dto = new ArticleDTO();
@@ -42,6 +36,12 @@ public class FreeBoardRepository {
     return dto;
   };
 
+  private final RowMapper<CategoryDTO> categoryRowMapper = (rs, rowNum) -> {
+    CategoryDTO dto = new CategoryDTO();
+    dto.setCateId(rs.getLong("cate_id"));
+    dto.setCateName(rs.getString("cate_name"));
+    return dto;
+  };
   private final RowMapper<CommentDTO> commentRowMapper = (rs, rowNum) -> {
     CommentDTO dto = new CommentDTO();
     dto.setCommentId(rs.getLong("comment_id"));
@@ -55,22 +55,62 @@ public class FreeBoardRepository {
       dto.setCreatedAt(timestamp.toLocalDateTime());
     }
     dto.setDeleted(rs.getBoolean("is_deleted"));
-    dto.setAuthorNickname(rs.getString("nickname"));
+    dto.setNickname(rs.getString("nickname"));
     return dto;
   };
 
-  private final RowMapper<CategoryDTO> categoryRowMapper = (rs, rowNum) -> {
-    CategoryDTO dto = new CategoryDTO();
-    dto.setCateId(rs.getLong("cate_id"));
-    dto.setCateName(rs.getString("cate_name"));
-    return dto;
-  };
+  // 게시글 삭제
+  public int deleteArticle(Long articleId) {
+    String sql = "delete from letsfutsal.free_board where article_id = ?";
+    return jdbcTemplate.update(sql, articleId);
+  }
 
-  // 전체 게시글 개수
-  public int getTotalArticleCount() {
-    String sql = "SELECT COUNT(*) FROM letsfutsal.free_board";
-    Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
-    return count != null ? count : 0;
+  // 댓글 삭제 (소프트 삭제)
+  public int deleteComment(Long commentId) {
+    String sql = "update letsfutsal.free_board_comment set is_deleted = true where comment_id = ?";
+    return jdbcTemplate.update(sql, commentId);
+  }
+
+  // 카테고리 목록
+  public List<CategoryDTO> getAllCategories() {
+    String sql = "select cate_id, cate_name from letsfutsal.free_board_category order by cate_id";
+    return jdbcTemplate.query(sql, categoryRowMapper);
+  }
+
+  // 게시글 상세 조회
+  public ArticleDTO getArticleById(Long articleId) {
+    String sql = "select fb.article_id, fb.cate_id, fb.author_id, fb.title, fb.content, " +
+        "fb.created_at, fb.views, fbc.cate_name, u.nickname " +
+        "from letsfutsal.free_board fb " +
+        "join letsfutsal.free_board_category fbc on fb.cate_id = fbc.cate_id " +
+        "join letsfutsal.user u on fb.author_id = u.user_id " +
+        "where fb.article_id = ?";
+
+    List<ArticleDTO> results = jdbcTemplate.query(sql, articleRowMapper, articleId);
+    return results.isEmpty() ? null : results.get(0);
+  }
+
+  // 게시글 목록 조회
+  public List<ArticleDTO> getArticleList(int offset, int limit) {
+    String sql = "select fb.article_id, fb.cate_id, fb.author_id, fb.title, fb.content, " +
+        "fb.created_at, fb.views, fbc.cate_name, u.nickname " +
+        "from letsfutsal.free_board fb " +
+        "join letsfutsal.free_board_category fbc on fb.cate_id = fbc.cate_id " +
+        "join letsfutsal.user u on fb.author_id = u.user_id " +
+        "order by fb.article_id desc limit ? offset ?";
+
+    return jdbcTemplate.query(sql, articleRowMapper, limit, offset);
+  }
+
+  // 댓글 목록
+  public List<CommentDTO> getCommentsByArticleId(Long articleId) {
+    String sql = "select fbc.comment_id, fbc.article_id, fbc.author_id, fbc.parent_id, " +
+        "fbc.content, fbc.created_at, fbc.is_deleted, u.nickname " +
+        "from letsfutsal.free_board_comment fbc " +
+        "join letsfutsal.user u on fbc.author_id = u.user_id " +
+        "where fbc.article_id = ? order by fbc.comment_id asc";
+
+    return jdbcTemplate.query(sql, commentRowMapper, articleId);
   }
 
   // 검색 결과 개수
@@ -103,16 +143,55 @@ public class FreeBoardRepository {
     return count != null ? count : 0;
   }
 
-  // 게시글 목록 조회
-  public List<ArticleDTO> getArticleList(int offset, int limit) {
-    String sql = "SELECT fb.article_id, fb.cate_id, fb.author_id, fb.title, fb.content, " +
-        "fb.created_at, fb.views, fbc.cate_name, u.nickname " +
-        "FROM letsfutsal.free_board fb " +
-        "JOIN letsfutsal.free_board_category fbc ON fb.cate_id = fbc.cate_id " +
-        "JOIN letsfutsal.users u ON fb.author_id = u.user_id " +
-        "ORDER BY fb.article_id DESC LIMIT ? OFFSET ?";
+  // 전체 게시글 개수
+  public int getTotalArticleCount() {
+    String sql = "select count(*) from letsfutsal.free_board";
+    Integer count = jdbcTemplate.queryForObject(sql, Integer.class);
+    return count != null ? count : 0;
+  }
 
-    return jdbcTemplate.query(sql, articleRowMapper, limit, offset);
+  // 조회수 증가
+  public void increaseViews(Long articleId) {
+    String sql = "update letsfutsal.free_board set views = views + 1 where article_id = ?";
+    jdbcTemplate.update(sql, articleId);
+  }
+
+  // 게시글 작성
+  public Long insertArticle(ArticleDTO dto) {
+    String sql = "insert into letsfutsal.free_board (cate_id, author_id, title, content) values (?, ?, ?, ?)";
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    jdbcTemplate.update(connection -> {
+      PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      ps.setLong(1, dto.getCateId());
+      ps.setLong(2, dto.getAuthorId());
+      ps.setString(3, dto.getTitle());
+      ps.setString(4, dto.getContent());
+      return ps;
+    }, keyHolder);
+
+    return keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
+  }
+
+  // 댓글 작성
+  public Long insertComment(CommentDTO dto) {
+    String sql = "insert into letsfutsal.free_board_comment (article_id, author_id, parent_id, content) values (?, ?, ?, ?)";
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    jdbcTemplate.update(connection -> {
+      PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      ps.setLong(1, dto.getArticleId());
+      ps.setLong(2, dto.getAuthorId());
+      if (dto.getParentId() > 0) {
+        ps.setLong(3, dto.getParentId());
+      } else {
+        ps.setNull(3, java.sql.Types.BIGINT);
+      }
+      ps.setString(4, dto.getContent());
+      return ps;
+    }, keyHolder);
+
+    return keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
   }
 
   // 게시글 검색
@@ -145,95 +224,9 @@ public class FreeBoardRepository {
     return jdbcTemplate.query(sql.toString(), articleRowMapper, limit, offset);
   }
 
-  // 게시글 상세 조회
-  public ArticleDTO getArticleById(Long articleId) {
-    String sql = "SELECT fb.article_id, fb.cate_id, fb.author_id, fb.title, fb.content, " +
-        "fb.created_at, fb.views, fbc.cate_name, u.nickname " +
-        "FROM letsfutsal.free_board fb " +
-        "JOIN letsfutsal.free_board_category fbc ON fb.cate_id = fbc.cate_id " +
-        "JOIN letsfutsal.users u ON fb.author_id = u.user_id " +
-        "WHERE fb.article_id = ?";
-
-    List<ArticleDTO> results = jdbcTemplate.query(sql, articleRowMapper, articleId);
-    return results.isEmpty() ? null : results.get(0);
-  }
-
-  // 조회수 증가
-  public void increaseViews(Long articleId) {
-    String sql = "UPDATE letsfutsal.free_board SET views = views + 1 WHERE article_id = ?";
-    jdbcTemplate.update(sql, articleId);
-  }
-
-  // 게시글 작성
-  public Long insertArticle(ArticleDTO dto) {
-    String sql = "INSERT INTO letsfutsal.free_board (cate_id, author_id, title, content) VALUES (?, ?, ?, ?)";
-
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-    jdbcTemplate.update(connection -> {
-      PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-      ps.setLong(1, dto.getCateId());
-      ps.setLong(2, dto.getAuthorId());
-      ps.setString(3, dto.getTitle());
-      ps.setString(4, dto.getContent());
-      return ps;
-    }, keyHolder);
-
-    return keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
-  }
-
   // 게시글 수정
   public int updateArticle(ArticleDTO dto) {
-    String sql = "UPDATE letsfutsal.free_board SET cate_id = ?, title = ?, content = ? WHERE article_id = ?";
+    String sql = "update letsfutsal.free_board set cate_id = ?, title = ?, content = ? where article_id = ?";
     return jdbcTemplate.update(sql, dto.getCateId(), dto.getTitle(), dto.getContent(), dto.getArticleId());
-  }
-
-  // 게시글 삭제
-  public int deleteArticle(Long articleId) {
-    String sql = "DELETE FROM letsfutsal.free_board WHERE article_id = ?";
-    return jdbcTemplate.update(sql, articleId);
-  }
-
-  // 카테고리 목록
-  public List<CategoryDTO> getAllCategories() {
-    String sql = "SELECT cate_id, cate_name FROM letsfutsal.free_board_category ORDER BY cate_id";
-    return jdbcTemplate.query(sql, categoryRowMapper);
-  }
-
-  // 댓글 목록
-  public List<CommentDTO> getCommentsByArticleId(Long articleId) {
-    String sql = "SELECT fbc.comment_id, fbc.article_id, fbc.author_id, fbc.parent_id, " +
-        "fbc.content, fbc.created_at, fbc.is_deleted, u.nickname " +
-        "FROM letsfutsal.free_board_comment fbc " +
-        "JOIN letsfutsal.users u ON fbc.author_id = u.user_id " +
-        "WHERE fbc.article_id = ? ORDER BY fbc.comment_id ASC";
-
-    return jdbcTemplate.query(sql, commentRowMapper, articleId);
-  }
-
-  // 댓글 작성
-  public Long insertComment(CommentDTO dto) {
-    String sql = "INSERT INTO letsfutsal.free_board_comment (article_id, author_id, parent_id, content) VALUES (?, ?, ?, ?)";
-
-    KeyHolder keyHolder = new GeneratedKeyHolder();
-    jdbcTemplate.update(connection -> {
-      PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-      ps.setLong(1, dto.getArticleId());
-      ps.setLong(2, dto.getAuthorId());
-      if (dto.getParentId() != null) {
-        ps.setLong(3, dto.getParentId());
-      } else {
-        ps.setNull(3, java.sql.Types.BIGINT);
-      }
-      ps.setString(4, dto.getContent());
-      return ps;
-    }, keyHolder);
-
-    return keyHolder.getKey() != null ? keyHolder.getKey().longValue() : null;
-  }
-
-  // 댓글 삭제 (소프트 삭제)
-  public int deleteComment(Long commentId) {
-    String sql = "UPDATE letsfutsal.free_board_comment SET is_deleted = true WHERE comment_id = ?";
-    return jdbcTemplate.update(sql, commentId);
   }
 }
