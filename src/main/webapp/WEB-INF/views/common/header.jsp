@@ -59,7 +59,7 @@
           <a class="nav-link ${param.menu == 'rank' ? 'active' : ''}" href="${pageContext.request.contextPath}/rank">랭킹</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link ${param.menu == 'board' ? 'active' : ''}" href="${pageContext.request.contextPath}/board">게시판</a>
+          <a class="nav-link ${param.menu == 'free' ? 'active' : ''}" href="${pageContext.request.contextPath}/free">게시판</a>
         </li>
       </ul>
     </div>

@@ -46,7 +46,7 @@ public class MatchController {
     List<MatchDTO> matches = matchService.getMatchList(type, region, startHour, endHour, gender, minGrade, maxGrade, status);
 
     model.addAttribute("matches", matches);
-    model.addAttribute("type", type != null ? type : "all");
+    model.addAttribute("type", type);
     model.addAttribute("region", region);
     model.addAttribute("startHour", startHour);
     model.addAttribute("endHour", endHour);
