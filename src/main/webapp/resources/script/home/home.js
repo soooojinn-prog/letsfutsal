@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const today = new Date();
   // Manually set date for sample dataset
-  today.setDate(20);
+  //today.setDate(20);
   for (let i = 0; i < 8; i++) {
     const d = new Date();
     d.setDate(today.getDate() + i);

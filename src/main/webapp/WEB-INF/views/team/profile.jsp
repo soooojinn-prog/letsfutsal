@@ -1,12 +1,9 @@
-<%@ page import="io.github.wizwix.letsfutsal.dto.TeamDTO" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>팀 개별 페이지</title>
-</head>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<jsp:include page="/WEB-INF/views/common/header.jsp">
+  <jsp:param name="title" value="${team.teamName}"/>
+  <jsp:param name="menu" value="team"/>
+</jsp:include>
 <script>
   const isLogin = ${loginUser != null};
   function joinTeam() {
@@ -21,47 +18,57 @@
     }
   }
 </script>
-<%
-  var team = (TeamDTO) request.getAttribute("team");
-
-  String genderStr = team.getGender().toString();
-  String gender = switch (genderStr) {
-    case "MALE" -> "남성 전용";
-    case "FEMALE" -> "여성 전용";
-    case "BOTH" -> "무관";
-    default -> "";
-  };
-  pageContext.setAttribute("gender", gender);
-
-  String minGrade = switch ((int) team.getMinGrade()) {
-    case 0 -> "미배정";
-    case 1 -> "초보";
-    case 2 -> "중수";
-    case 3 -> "고수";
-    default -> String.valueOf(team.getMinGrade());
-  };
-  pageContext.setAttribute("minGrade", minGrade);
-  String maxGrade = switch ((int) team.getMinGrade()) {
-    case 0 -> "미배정";
-    case 1 -> "초보";
-    case 2 -> "중수";
-    case 3 -> "고수";
-    default -> String.valueOf(team.getMinGrade());
-  };
-  pageContext.setAttribute("maxGrade", maxGrade);
-%>
-<body>
-  <h2>${team.teamName}</h2>
-  성별 : ${gender}<br>
-  최소 등급 : ${minGrade}<br>
-  최대 등급 : ${maxGrade}<br>
-  지역 : ${team.region}<br>
-  소개 :
-  <p>${team.introduction}</p>
-  팀 주장 : ${team.leaderNickname}<br><br>
-  <!-- 버튼 하나만 사용 -->
-  <button type="button" onclick="joinTeam()">팀 가입하기</button>
-  <br><br>
-  <a href="${pageContext.request.contextPath}/team/list">← 팀 목록으로</a>
-</body>
-</html>
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0 fw-bold">${team.teamName}</h4>
+      </div>
+      <div class="card-body">
+        <table class="table table-borderless">
+          <tr>
+            <th class="text-muted" style="width: 120px;">성별</th>
+            <td><c:choose>
+                <c:when test="${team.gender == 'BOTH'}">혼성</c:when>
+                <c:when test="${team.gender == 'MALE'}">남성</c:when>
+                <c:when test="${team.gender == 'FEMALE'}">여성</c:when>
+                <c:otherwise>-</c:otherwise>
+              </c:choose></td>
+          </tr>
+          <tr>
+            <th class="text-muted">등급</th>
+            <td><c:choose>
+                <c:when test="${team.minGrade == 0}">입문</c:when>
+                <c:when test="${team.minGrade == 1}">초보</c:when>
+                <c:when test="${team.minGrade == 2}">중수</c:when>
+                <c:when test="${team.minGrade == 3}">고수</c:when>
+              </c:choose> ~ <c:choose>
+                <c:when test="${team.maxGrade == 0}">입문</c:when>
+                <c:when test="${team.maxGrade == 1}">초보</c:when>
+                <c:when test="${team.maxGrade == 2}">중수</c:when>
+                <c:when test="${team.maxGrade == 3}">고수</c:when>
+              </c:choose></td>
+          </tr>
+          <tr>
+            <th class="text-muted">지역</th>
+            <td>${team.region}</td>
+          </tr>
+          <tr>
+            <th class="text-muted">팀 주장</th>
+            <td>${team.leaderNickname}</td>
+          </tr>
+        </table>
+        <hr>
+        <h6 class="fw-bold">팀 소개</h6>
+        <p class="text-muted">${team.introduction}</p>
+      </div>
+      <div class="card-footer bg-transparent">
+        <button type="button" class="btn btn-success" onclick="joinTeam()">팀
+          가입하기</button>
+        <a href="${pageContext.request.contextPath}/team/list"
+           class="btn btn-outline-secondary ms-2">팀 목록으로</a>
+      </div>
+    </div>
+  </div>
+</div>
+<jsp:include page="/WEB-INF/views/common/footer.jsp"/>

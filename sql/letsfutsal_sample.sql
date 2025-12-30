@@ -261,48 +261,48 @@ values ('여의도구장', '서울', '서울 영등포구 여의도동 1-1', '09
 insert into letsfutsal.game_match (stadium_id, renter_entity_id, match_type, match_date, start_hour, end_hour, gender, min_grade, max_grade, status)
 values
 -- 여의도구장 (구장 1) - 2 경기
-(1, (select entity_id from letsfutsal.entity where user_id = 1), 'INDIVIDUAL', '2025-12-20', '09:00:00', '10:00:00', 'BOTH', 0, 3, 0),
-(1, (select entity_id from letsfutsal.entity where team_id = 1), 'TEAM', '2025-12-20', '14:00:00', '15:00:00', 'BOTH', 1, 3, 0),
+(1, (select entity_id from letsfutsal.entity where user_id = 1), 'INDIVIDUAL', '2025-12-30', '09:00:00', '10:00:00', 'BOTH', 0, 3, 0),
+(1, (select entity_id from letsfutsal.entity where team_id = 1), 'TEAM', '2025-12-30', '14:00:00', '15:00:00', 'BOTH', 1, 3, 0),
 -- 강남구장 (구장 2) - 1 경기
-(2, (select entity_id from letsfutsal.entity where user_id = 2), 'INDIVIDUAL', '2025-12-20', '10:00:00', '11:00:00', 'MALE', 0, 2, 0),
+(2, (select entity_id from letsfutsal.entity where user_id = 2), 'INDIVIDUAL', '2025-12-30', '10:00:00', '11:00:00', 'MALE', 0, 2, 0),
 -- 분당구장 (구장 3) - 2 경기
-(3, (select entity_id from letsfutsal.entity where user_id = 3), 'INDIVIDUAL', '2025-12-21', '09:00:00', '10:00:00', 'FEMALE', 0, 2, 0),
-(3, (select entity_id from letsfutsal.entity where user_id = 1), 'RENT', '2025-12-21', '15:00:00', '16:00:00', 'BOTH', 0, 3, 0),
+(3, (select entity_id from letsfutsal.entity where user_id = 3), 'INDIVIDUAL', '2025-12-31', '09:00:00', '10:00:00', 'FEMALE', 0, 2, 0),
+(3, (select entity_id from letsfutsal.entity where user_id = 1), 'RENT', '2025-12-31', '15:00:00', '16:00:00', 'BOTH', 0, 3, 0),
 -- 수원구장 (구장 4) - 1 경기
-(4, (select entity_id from letsfutsal.entity where team_id = 3), 'TEAM', '2025-12-21', '11:00:00', '12:00:00', 'BOTH', 0, 2, 0),
+(4, (select entity_id from letsfutsal.entity where team_id = 3), 'TEAM', '2025-12-31', '11:00:00', '12:00:00', 'BOTH', 0, 2, 0),
 -- 춘천구장 (구장 5) - 0 경기
 -- 강릉구장 (구장 6) - 2 경기
-(6, (select entity_id from letsfutsal.entity where user_id = 4), 'INDIVIDUAL', '2025-12-22', '13:00:00', '14:00:00', 'BOTH', 1, 3, 0),
-(6, (select entity_id from letsfutsal.entity where team_id = 5), 'TEAM', '2025-12-22', '16:00:00', '17:00:00', 'MALE', 0, 2, 0),
+(6, (select entity_id from letsfutsal.entity where user_id = 4), 'INDIVIDUAL', '2026-01-01', '13:00:00', '14:00:00', 'BOTH', 1, 3, 0),
+(6, (select entity_id from letsfutsal.entity where team_id = 5), 'TEAM', '2026-01-01', '16:00:00', '17:00:00', 'MALE', 0, 2, 0),
 -- 청주구장 (구장 7) - 1 경기
-(7, (select entity_id from letsfutsal.entity where user_id = 5), 'INDIVIDUAL', '2025-12-23', '10:00:00', '11:00:00', 'MALE', 0, 3, 0),
+(7, (select entity_id from letsfutsal.entity where user_id = 5), 'INDIVIDUAL', '2026-01-02', '10:00:00', '11:00:00', 'MALE', 0, 3, 0),
 -- 충주구장 (구장 8) - 2 경기
-(8, (select entity_id from letsfutsal.entity where user_id = 6), 'INDIVIDUAL', '2025-12-23', '09:00:00', '10:00:00', 'BOTH', 0, 2, 0),
-(8, (select entity_id from letsfutsal.entity where team_id = 7), 'TEAM', '2025-12-23', '14:00:00', '15:00:00', 'MALE', 1, 3, 0),
+(8, (select entity_id from letsfutsal.entity where user_id = 6), 'INDIVIDUAL', '2026-01-02', '09:00:00', '10:00:00', 'BOTH', 0, 2, 0),
+(8, (select entity_id from letsfutsal.entity where team_id = 7), 'TEAM', '2026-01-02', '14:00:00', '15:00:00', 'MALE', 1, 3, 0),
 -- 천안구장 (구장 9) - 1 경기
-(9, (select entity_id from letsfutsal.entity where user_id = 10), 'RENT', '2025-12-24', '11:00:00', '12:00:00', 'BOTH', 0, 3, 0),
+(9, (select entity_id from letsfutsal.entity where user_id = 10), 'RENT', '2026-01-03', '11:00:00', '12:00:00', 'BOTH', 0, 3, 0),
 -- 아산구장 (구장 10) - 0 경기
 -- 전주구장 (구장 11) - 2 경기
-(11, (select entity_id from letsfutsal.entity where user_id = 7), 'INDIVIDUAL', '2025-12-24', '10:00:00', '11:00:00', 'BOTH', 0, 3, 0),
-(11, (select entity_id from letsfutsal.entity where team_id = 11), 'TEAM', '2025-12-24', '15:00:00', '16:00:00', 'BOTH', 0, 3, 0),
+(11, (select entity_id from letsfutsal.entity where user_id = 7), 'INDIVIDUAL', '2026-01-03', '10:00:00', '11:00:00', 'BOTH', 0, 3, 0),
+(11, (select entity_id from letsfutsal.entity where team_id = 11), 'TEAM', '2026-01-03', '15:00:00', '16:00:00', 'BOTH', 0, 3, 0),
 -- 군산구장 (구장 12) - 1 경기
-(12, (select entity_id from letsfutsal.entity where user_id = 8), 'INDIVIDUAL', '2025-12-25', '13:00:00', '14:00:00', 'MALE', 1, 3, 0),
+(12, (select entity_id from letsfutsal.entity where user_id = 8), 'INDIVIDUAL', '2026-01-04', '13:00:00', '14:00:00', 'MALE', 1, 3, 0),
 -- 순천구장 (구장 13) - 2 경기
-(13, (select entity_id from letsfutsal.entity where user_id = 9), 'INDIVIDUAL', '2025-12-25', '09:00:00', '10:00:00', 'FEMALE', 0, 2, 0),
-(13, (select entity_id from letsfutsal.entity where team_id = 13), 'TEAM', '2025-12-25', '14:00:00', '15:00:00', 'MALE', 1, 3, 0),
+(13, (select entity_id from letsfutsal.entity where user_id = 9), 'INDIVIDUAL', '2026-01-04', '09:00:00', '10:00:00', 'FEMALE', 0, 2, 0),
+(13, (select entity_id from letsfutsal.entity where team_id = 13), 'TEAM', '2026-01-04', '14:00:00', '15:00:00', 'MALE', 1, 3, 0),
 -- 여수구장 (구장 14) - 0 경기
 -- 포항구장 (구장 15) - 1 경기
-(15, (select entity_id from letsfutsal.entity where team_id = 15), 'TEAM', '2025-12-26', '10:00:00', '11:00:00', 'MALE', 2, 3, 0),
+(15, (select entity_id from letsfutsal.entity where team_id = 15), 'TEAM', '2026-01-05', '10:00:00', '11:00:00', 'MALE', 2, 3, 0),
 -- 경주구장 (구장 16) - 2 경기
-(16, (select entity_id from letsfutsal.entity where user_id = 10), 'INDIVIDUAL', '2025-12-26', '14:00:00', '15:00:00', 'BOTH', 0, 1, 0),
-(16, (select entity_id from letsfutsal.entity where user_id = 20), 'RENT', '2025-12-26', '18:00:00', '19:00:00', 'BOTH', 0, 3, 0),
+(16, (select entity_id from letsfutsal.entity where user_id = 10), 'INDIVIDUAL', '2026-01-05', '14:00:00', '15:00:00', 'BOTH', 0, 1, 0),
+(16, (select entity_id from letsfutsal.entity where user_id = 20), 'RENT', '2026-01-05', '18:00:00', '19:00:00', 'BOTH', 0, 3, 0),
 -- 창원구장 (구장 17) - 1 경기
-(17, (select entity_id from letsfutsal.entity where user_id = 11), 'INDIVIDUAL', '2025-12-27', '11:00:00', '12:00:00', 'MALE', 0, 3, 0),
+(17, (select entity_id from letsfutsal.entity where user_id = 11), 'INDIVIDUAL', '2026-01-06', '11:00:00', '12:00:00', 'MALE', 0, 3, 0),
 -- 진주구장 (구장 18) - 2 경기
-(18, (select entity_id from letsfutsal.entity where user_id = 12), 'INDIVIDUAL', '2025-12-27', '09:00:00', '10:00:00', 'FEMALE', 0, 2, 0),
-(18, (select entity_id from letsfutsal.entity where team_id = 18), 'TEAM', '2025-12-27', '16:00:00', '17:00:00', 'FEMALE', 0, 2, 0),
+(18, (select entity_id from letsfutsal.entity where user_id = 12), 'INDIVIDUAL', '2026-01-06', '09:00:00', '10:00:00', 'FEMALE', 0, 2, 0),
+(18, (select entity_id from letsfutsal.entity where team_id = 18), 'TEAM', '2026-01-07', '16:00:00', '17:00:00', 'FEMALE', 0, 2, 0),
 -- 제주시구장 (구장 19) - 1 경기
-(19, (select entity_id from letsfutsal.entity where team_id = 19), 'TEAM', '2025-12-28', '13:00:00', '14:00:00', 'BOTH', 0, 3, 0);
+(19, (select entity_id from letsfutsal.entity where team_id = 19), 'TEAM', '2026-01-07', '13:00:00', '14:00:00', 'BOTH', 0, 3, 0);
 -- 서귀포구장 (구장 20) - 0 경기
 
 -- match_individual_players
