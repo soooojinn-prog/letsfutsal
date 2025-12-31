@@ -6,7 +6,6 @@ import io.github.wizwix.letsfutsal.enums.Match;
 import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 

@@ -32,7 +32,4 @@
     </div>
   </c:otherwise>
 </c:choose>
-<div class="mt-4">
-  <a href="${pageContext.request.contextPath}/stadium" class="btn btn-secondary">구장 메인으로</a>
-</div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"/>

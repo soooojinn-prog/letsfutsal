@@ -18,6 +18,11 @@ public class CommentDTO {
 
   public CommentDTO() {}
 
+  public Date getCreatedAtAsDate() {
+    if (createdAt == null) return null;
+    return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
+  }
+
   public int hashCode() {
     final int PRIME = 59;
     int result = 1;
@@ -61,6 +66,8 @@ public class CommentDTO {
 
   protected boolean canEqual(final Object other) {return other instanceof CommentDTO;}
 
+  public String toString() {return "CommentDTO(articleId=" + this.getArticleId() + ", authorId=" + this.getAuthorId() + ", commentId=" + this.getCommentId() + ", content=" + this.getContent() + ", createdAt=" + this.getCreatedAt() + ", isDeleted=" + this.isDeleted() + ", nickname=" + this.getNickname() + ", parentId=" + this.getParentId() + ")";}
+
   public long getArticleId() {return this.articleId;}
 
   public void setArticleId(long articleId) {this.articleId = articleId;}
@@ -79,11 +86,6 @@ public class CommentDTO {
 
   public LocalDateTime getCreatedAt() {return this.createdAt;}
 
-  public Date getCreatedAtAsDate() {
-    if (createdAt == null) return null;
-    return Date.from(createdAt.atZone(ZoneId.systemDefault()).toInstant());
-  }
-
   public void setCreatedAt(LocalDateTime createdAt) {this.createdAt = createdAt;}
 
   public String getNickname() {return this.nickname;}
@@ -97,6 +99,4 @@ public class CommentDTO {
   public boolean isDeleted() {return this.isDeleted;}
 
   public void setDeleted(boolean isDeleted) {this.isDeleted = isDeleted;}
-
-  public String toString() {return "CommentDTO(articleId=" + this.getArticleId() + ", authorId=" + this.getAuthorId() + ", commentId=" + this.getCommentId() + ", content=" + this.getContent() + ", createdAt=" + this.getCreatedAt() + ", isDeleted=" + this.isDeleted() + ", nickname=" + this.getNickname() + ", parentId=" + this.getParentId() + ")";}
 }

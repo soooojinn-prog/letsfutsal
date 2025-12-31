@@ -1,5 +1,8 @@
 package io.github.wizwix.letsfutsal.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -16,17 +19,11 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.RestController;
-import tools.jackson.databind.cfg.DateTimeFeature;
-import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.datatype.jsr310.JavaTimeModule;
 
 import javax.sql.DataSource;
 
 @Configuration
-@ComponentScan(
-    basePackages = "io.github.wizwix.letsfutsal",
-    excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class, RestController.class})
-)
+@ComponentScan(basePackages = "io.github.wizwix.letsfutsal", excludeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class, RestController.class}))
 @MapperScan("io.github.wizwix.letsfutsal.mapper")
 @EnableTransactionManagement
 public class RootConfig {
@@ -44,8 +41,11 @@ public class RootConfig {
 
   @Bean
   @Primary
-  public JsonMapper jsonMapper() {
-    return JsonMapper.builder().addModule(new JavaTimeModule()).disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS).build();
+  public ObjectMapper objectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.registerModule(new JavaTimeModule());
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    return mapper;
   }
 
   @Bean

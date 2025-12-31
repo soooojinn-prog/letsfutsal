@@ -6,7 +6,6 @@ import io.github.wizwix.letsfutsal.enums.Match;
 import io.github.wizwix.letsfutsal.mapper.MatchMapper;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 

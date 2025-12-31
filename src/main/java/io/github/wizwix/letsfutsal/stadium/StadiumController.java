@@ -26,11 +26,12 @@ public class StadiumController {
     return "stadium/list";
   }
 
-  // 메인
+  // 메인 (구장 목록으로 바로 이동)
   @SuppressWarnings("ConfusingMainMethod")
   @GetMapping("")
-  public String main() {
-    return "stadium/main";
+  public String main(Model model) {
+    model.addAttribute("stadiums", service.list());
+    return "stadium/list";
   }
 
   // 2. 구장 상세 페이지

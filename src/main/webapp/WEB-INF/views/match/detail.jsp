@@ -1,117 +1,143 @@
-<%@ page import="io.github.wizwix.letsfutsal.dto.MatchDTO" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<jsp:include page="/WEB-INF/views/common/header.jsp">
-  <jsp:param name="title" value="경기 상세"/>
+<jsp:include page="../common/header.jsp">
+  <jsp:param name="title" value="매치 상세"/>
   <jsp:param name="menu" value="match"/>
 </jsp:include>
-<%
-  var match = (MatchDTO) request.getAttribute("match");
 
-  String minGrade = switch (match.getMinGrade()) {
-    case 0 -> "입문";
-    case 1 -> "초보";
-    case 2 -> "중수";
-    case 3 -> "고수";
-    default -> String.valueOf(match.getMinGrade());
-  };
-  pageContext.setAttribute("minGrade", minGrade);
-  String maxGrade = switch (match.getMaxGrade()) { // 로직 유지: 오타 수정 없이 기존 흐름을 따릅니다 (match.getMinGrade -> match.getMaxGrade 권장되나 요청대로 유지)
-    case 0 -> "입문";
-    case 1 -> "초보";
-    case 2 -> "중수";
-    case 3 -> "고수";
-    default -> String.valueOf(match.getMaxGrade());
-  };
-  pageContext.setAttribute("maxGrade", maxGrade);
-%>
-<div class="container py-5">
-  <div class="d-flex align-items-center mb-4">
-    <a href="${pageContext.request.contextPath}/match" class="btn btn-outline-secondary btn-sm me-3 text-decoration-none">
-      &larr; 목록
-    </a>
-    <h2 class="fw-bold text-dark m-0">경기 상세 정보</h2>
+<div class="mb-4">
+  <a href="${pageContext.request.contextPath}/match" class="btn btn-outline-secondary btn-sm">
+    &larr; 목록으로
+  </a>
+</div>
+
+<div class="row">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">매치 상세 정보</h4>
+      </div>
+      <div class="card-body">
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">경기 ID</div>
+          <div class="col-8 fw-bold">${match.matchId}</div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">구장</div>
+          <div class="col-8 fw-bold">${match.stadiumName}</div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">경기 타입</div>
+          <div class="col-8">
+            <c:choose>
+              <c:when test="${match.matchType == 'INDIVIDUAL'}">
+                <span class="badge bg-info">개인 경기</span>
+              </c:when>
+              <c:when test="${match.matchType == 'TEAM'}">
+                <span class="badge bg-warning text-dark">팀 경기</span>
+              </c:when>
+              <c:otherwise>
+                <span class="badge bg-secondary">대여</span>
+              </c:otherwise>
+            </c:choose>
+          </div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">경기 날짜</div>
+          <div class="col-8">${match.matchDate}</div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">경기 시간</div>
+          <div class="col-8">${match.startHour} ~ ${match.endHour}</div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">성별</div>
+          <div class="col-8">
+            <c:choose>
+              <c:when test="${match.gender == 'MALE'}">
+                <span class="badge bg-primary">남성</span>
+              </c:when>
+              <c:when test="${match.gender == 'FEMALE'}">
+                <span class="badge bg-danger">여성</span>
+              </c:when>
+              <c:otherwise>
+                <span class="badge bg-success">혼성</span>
+              </c:otherwise>
+            </c:choose>
+          </div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">등급 범위</div>
+          <div class="col-8">
+            <c:choose>
+              <c:when test="${match.minGrade == 0}">입문</c:when>
+              <c:when test="${match.minGrade == 1}">초보</c:when>
+              <c:when test="${match.minGrade == 2}">중수</c:when>
+              <c:when test="${match.minGrade == 3}">고수</c:when>
+            </c:choose>
+            ~
+            <c:choose>
+              <c:when test="${match.maxGrade == 0}">입문</c:when>
+              <c:when test="${match.maxGrade == 1}">초보</c:when>
+              <c:when test="${match.maxGrade == 2}">중수</c:when>
+              <c:when test="${match.maxGrade == 3}">고수</c:when>
+            </c:choose>
+          </div>
+        </div>
+        <hr>
+        <div class="row align-items-center py-2">
+          <div class="col-4 text-muted">참여 현황</div>
+          <div class="col-8">
+            <span class="fs-5 fw-bold text-primary">${match.status}</span>
+            <span class="text-muted">/ 10명</span>
+            <c:if test="${match.status < 10}">
+              <span class="badge bg-success ms-2">참여 가능</span>
+            </c:if>
+            <c:if test="${match.status >= 10}">
+              <span class="badge bg-danger ms-2">마감</span>
+            </c:if>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <c:if test="${match.status < 10}">
+          <button class="btn btn-primary">참여 신청</button>
+        </c:if>
+        <c:if test="${match.status >= 10}">
+          <button class="btn btn-secondary" disabled>마감되었습니다</button>
+        </c:if>
+      </div>
+    </div>
   </div>
 
-  <div class="row">
-    <div class="col-lg-8 mx-auto">
-      <div class="card border-0 shadow-sm overflow-hidden">
-        <div class="card-header bg-white py-3 border-bottom">
-          <h5 class="card-title mb-0 fw-bold text-primary">Match #${match.matchId}</h5>
+  <div class="col-lg-4 mt-4 mt-lg-0">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h5 class="mb-0">참여 인원</h5>
+      </div>
+      <div class="card-body">
+        <div class="progress mb-3">
+          <div class="progress-bar" role="progressbar" style="width: ${match.status * 10}%">
+            ${match.status}/10
+          </div>
         </div>
-        <div class="card-body p-0">
-          <table class="table mb-0">
-            <tbody>
-              <tr>
-                <th class="bg-light px-4 py-3" style="width: 30%;">구장</th>
-                <td class="px-4 py-3 fw-bold">${match.stadiumName}</td>
-              </tr>
-              <tr>
-                <th class="bg-light px-4 py-3">경기 타입</th>
-                <td class="px-4 py-3">
-                  <c:choose>
-                    <c:when test="${match.matchType == 'INDIVIDUAL'}">
-                      <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-2">개인 경기</span>
-                    </c:when>
-                    <c:when test="${match.matchType == 'TEAM'}">
-                      <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-3 py-2">팀 경기</span>
-                    </c:when>
-                    <c:otherwise>${match.matchType}</c:otherwise>
-                  </c:choose>
-                </td>
-              </tr>
-              <tr>
-                <th class="bg-light px-4 py-3">경기 일시</th>
-                <td class="px-4 py-3">
-                  <div class="text-dark">${match.matchDate}</div>
-                  <div class="text-muted small">${match.startHour} ~ ${match.endHour}</div>
-                </td>
-              </tr>
-              <tr>
-                <th class="bg-light px-4 py-3">성별</th>
-                <td class="px-4 py-3">
-                  <c:choose>
-                    <c:when test="${match.gender == 'MALE'}">남성 전용</c:when>
-                    <c:when test="${match.gender == 'FEMALE'}">여성 전용</c:when>
-                    <c:when test="${match.gender == 'BOTH'}">남녀 혼성</c:when>
-                    <c:otherwise>${match.gender}</c:otherwise>
-                  </c:choose>
-                </td>
-              </tr>
-              <tr>
-                <th class="bg-light px-4 py-3">등급 범위</th>
-                <td class="px-4 py-3">
-                  <span class="text-primary fw-semibold">${minGrade}</span>
-                  <span class="text-muted mx-1">~</span>
-                  <span class="text-primary fw-semibold">${maxGrade}</span>
-                </td>
-              </tr>
-              <tr>
-                <th class="bg-light px-4 py-3">빈 자리 여부</th>
-                <td class="px-4 py-3">
-                  <c:choose>
-                    <c:when test="${match.status < 10}">
-                      <span class="badge rounded-pill bg-success px-4 py-2">현재 신청 가능</span>
-                    </c:when>
-                    <c:otherwise>
-                      <span class="badge rounded-pill bg-danger px-4 py-2">신청 마감</span>
-                    </c:otherwise>
-                  </c:choose>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="card-footer bg-white p-4 text-center">
-          <c:if test="${match.status < 10}">
-            <button type="button" class="btn btn-primary btn-lg w-100 fw-bold shadow-sm">참가 신청하기</button>
-          </c:if>
-          <c:if test="${match.status >= 10}">
-            <button type="button" class="btn btn-secondary btn-lg w-100 disabled" disabled>신청이 마감되었습니다</button>
-          </c:if>
-        </div>
+        <p class="text-muted small">
+          <c:choose>
+            <c:when test="${match.status == 0}">아직 참여자가 없습니다.</c:when>
+            <c:when test="${match.status < 5}">참여자를 모집 중입니다.</c:when>
+            <c:when test="${match.status < 10}">곧 마감됩니다!</c:when>
+            <c:otherwise>모집이 완료되었습니다.</c:otherwise>
+          </c:choose>
+        </p>
       </div>
     </div>
   </div>
 </div>
-<jsp:include page="/WEB-INF/views/common/footer.jsp"/>
+
+<jsp:include page="../common/footer.jsp"/>

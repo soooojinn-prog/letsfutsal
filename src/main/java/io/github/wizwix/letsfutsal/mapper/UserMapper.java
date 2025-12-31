@@ -11,11 +11,13 @@ public interface UserMapper {
 
   int insertUser(@Param("user") UserDTO user);
 
+  String selectNicknameByUserId(@Param("userId") long userId);
+
   List<TeamDTO> selectTeamsByUserId(@Param("userId") long userId);
 
-  List<UserDTO> selectTopUsersByGradeAndPosition(@Param("grade") int grade, @Param("position") String position);
+  List<UserDTO> selectTopUsersByGender(@Param("gender") String gender, @Param("grade") int grade);
 
-  String selectNicknameByUserId(@Param("userId") long userId);
+  List<UserDTO> selectTopUsersByGradeAndPosition(@Param("grade") int grade, @Param("position") String position);
 
   UserDTO selectUserByEmail(@Param("email") String email);
 

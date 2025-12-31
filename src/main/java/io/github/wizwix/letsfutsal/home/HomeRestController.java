@@ -19,11 +19,7 @@ public class HomeRestController {
 
   @GetMapping("/api/matches")
   @ResponseBody
-  public List<MatchDTO> getMatches(
-      @RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-      @RequestParam("region") String region,
-      @RequestParam("type") String type
-  ) {
+  public List<MatchDTO> getMatches(@RequestParam("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, @RequestParam("region") String region, @RequestParam("type") String type) {
     return matchMapper.selectMatchesByFilters(date, region, type);
   }
 }

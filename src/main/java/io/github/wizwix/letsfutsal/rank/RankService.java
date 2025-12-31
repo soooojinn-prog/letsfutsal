@@ -1,7 +1,6 @@
 package io.github.wizwix.letsfutsal.rank;
 
 import io.github.wizwix.letsfutsal.dto.UserDTO;
-import io.github.wizwix.letsfutsal.mapper.TeamMapper;
 import io.github.wizwix.letsfutsal.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,11 @@ public class RankService implements IRankService {
   @Autowired
   public RankService(UserMapper userMapper) {
     this.userMapper = userMapper;
+  }
+
+  @Override
+  public List<UserDTO> getGenderRankings(String gender, int grade) {
+    return userMapper.selectTopUsersByGender(gender, grade);
   }
 
   @Override

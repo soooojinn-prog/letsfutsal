@@ -33,20 +33,12 @@ public class MatchController {
 
   // 경기 목록 조회
   @GetMapping
-  public String list(@RequestParam(name = "type", required = false, defaultValue = "all") String type,
-                     @RequestParam(name = "region", required = false) String region,
-                     @RequestParam(name = "startHour", required = false) String startHour,
-                     @RequestParam(name = "endHour", required = false) String endHour,
-                     @RequestParam(name = "gender", required = false) String gender,
-                     @RequestParam(name = "minGrade", required = false) Integer minGrade,
-                     @RequestParam(name = "maxGrade", required = false) Integer maxGrade,
-                     @RequestParam(name = "status", required = false) Integer status,
-                     Model model) {
+  public String list(@RequestParam(name = "type", required = false, defaultValue = "all") String type, @RequestParam(name = "region", required = false) String region, @RequestParam(name = "startHour", required = false) String startHour, @RequestParam(name = "endHour", required = false) String endHour, @RequestParam(name = "gender", required = false) String gender, @RequestParam(name = "minGrade", required = false) Integer minGrade, @RequestParam(name = "maxGrade", required = false) Integer maxGrade, @RequestParam(name = "status", required = false) Integer status, Model model) {
 
     List<MatchDTO> matches = matchService.getMatchList(type, region, startHour, endHour, gender, minGrade, maxGrade, status);
 
     model.addAttribute("matches", matches);
-    model.addAttribute("type", type);
+    model.addAttribute("type", type != null ? type : "all");
     model.addAttribute("region", region);
     model.addAttribute("startHour", startHour);
     model.addAttribute("endHour", endHour);

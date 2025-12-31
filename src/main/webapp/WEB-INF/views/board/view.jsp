@@ -1,229 +1,130 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>${article.title} - 자유 게시판</title>
-    <style>
-        body {
-          font-family: Arial, sans-serif;
-          margin: 20px;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 20px;
-        }
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<jsp:include page="../common/header.jsp">
+  <jsp:param name="title" value="${article.title}"/>
+  <jsp:param name="menu" value="board"/>
+</jsp:include>
 
-        .article-header {
-          border-bottom: 2px solid #4CAF50;
-          padding-bottom: 10px;
-          margin-bottom: 20px;
-        }
+<div class="mb-4">
+  <a href="${pageContext.request.contextPath}/free" class="btn btn-outline-secondary btn-sm">
+    &larr; 목록으로
+  </a>
+</div>
 
-        .article-title {
-          font-size: 24px;
-          font-weight: bold;
-          margin-bottom: 10px;
-        }
-
-        .article-info {
-          color: #666;
-          font-size: 14px;
-        }
-
-        .article-content {
-          padding: 20px;
-          background-color: #f9f9f9;
-          border-radius: 4px;
-          min-height: 200px;
-          line-height: 1.6;
-          white-space: pre-wrap;
-        }
-
-        .article-buttons {
-          margin: 20px 0;
-          text-align: right;
-        }
-
-        .btn {
-          padding: 8px 16px;
-          margin-left: 5px;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          text-decoration: none;
-          display: inline-block;
-        }
-
-        .btn-primary {
-          background-color: #4CAF50;
-          color: white;
-        }
-
-        .btn-warning {
-          background-color: #ff9800;
-          color: white;
-        }
-
-        .btn-danger {
-          background-color: #f44336;
-          color: white;
-        }
-
-        .btn-secondary {
-          background-color: #555;
-          color: white;
-        }
-
-        .comments-section {
-          margin-top: 40px;
-          border-top: 2px solid #ddd;
-          padding-top: 20px;
-        }
-
-        .comment {
-          padding: 15px;
-          margin-bottom: 10px;
-          background-color: #f5f5f5;
-          border-radius: 4px;
-        }
-
-        .comment.reply {
-          margin-left: 40px;
-          background-color: #e8e8e8;
-        }
-
-        .comment-header {
-          font-weight: bold;
-          margin-bottom: 5px;
-          color: #333;
-        }
-
-        .comment-date {
-          font-size: 12px;
-          color: #999;
-        }
-
-        .comment-content {
-          margin-top: 10px;
-          line-height: 1.5;
-          white-space: pre-wrap;
-        }
-
-        .comment-form {
-          margin-top: 20px;
-          padding: 15px;
-          background-color: #f0f0f0;
-          border-radius: 4px;
-        }
-
-        .comment-form textarea {
-          width: 100%;
-          padding: 10px;
-          border: 1px solid #ddd;
-          border-radius: 4px;
-          resize: vertical;
-        }
-
-        .deleted-comment {
-          color: #999;
-          font-style: italic;
-        }
-    </style>
-</head>
-<body>
-    <div class="article-header">
-        <div class="article-title">[${article.cateName}] ${article.title}</div>
-        <div class="article-info">
-            작성자: ${article.authorNickname} |
-            작성일: <fmt:formatDate value="${article.createdAtAsDate}" pattern="yyyy-MM-dd HH:mm"/> |
-            조회수: ${article.views}
-        </div>
+<!-- 게시글 -->
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-primary text-white">
+    <div class="d-flex justify-content-between align-items-center">
+      <h5 class="mb-0">
+        <c:choose>
+          <c:when test="${article.cateName == '공지사항'}"><span class="badge badge-category-notice me-2">${article.cateName}</span></c:when>
+          <c:when test="${article.cateName == '구장 리뷰'}"><span class="badge badge-category-review me-2">${article.cateName}</span></c:when>
+          <c:when test="${article.cateName == '경기 소감'}"><span class="badge badge-category-impression me-2">${article.cateName}</span></c:when>
+          <c:when test="${article.cateName == '팀원 모집'}"><span class="badge badge-category-recruit me-2">${article.cateName}</span></c:when>
+          <c:when test="${article.cateName == '중고 거래'}"><span class="badge badge-category-trade me-2">${article.cateName}</span></c:when>
+          <c:otherwise><span class="badge bg-secondary me-2">${article.cateName}</span></c:otherwise>
+        </c:choose>
+        ${article.title}
+      </h5>
     </div>
-
-    <div class="article-content">${article.content}</div>
-
-    <div class="article-buttons">
-        <a href="${pageContext.request.contextPath}/free" class="btn btn-secondary">목록</a>
-        <c:if test="${sessionScope.loginUser.userId == article.authorId}">
-            <a href="${pageContext.request.contextPath}/free/edit/${article.articleId}" class="btn btn-warning">수정</a>
-            <form action="${pageContext.request.contextPath}/free/delete/${article.articleId}"
-                  method="post" style="display: inline;"
-                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
-                <button type="submit" class="btn btn-danger">삭제</button>
-            </form>
-        </c:if>
+  </div>
+  <div class="card-body">
+    <div class="d-flex justify-content-between text-muted small mb-3 pb-3 border-bottom">
+      <div>
+        <span class="me-3">작성자: <strong>${article.authorNickname}</strong></span>
+        <span>작성일: <fmt:formatDate value="${article.createdAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></span>
+      </div>
+      <div>조회수: ${article.views}</div>
     </div>
+    <div class="article-content" style="min-height: 200px; white-space: pre-wrap; line-height: 1.8;">
+${article.content}</div>
+  </div>
+  <div class="card-footer d-flex justify-content-end gap-2">
+    <c:if test="${sessionScope.loginUser.userId == article.authorId}">
+      <a href="${pageContext.request.contextPath}/free/edit/${article.articleId}" class="btn btn-warning">수정</a>
+      <form action="${pageContext.request.contextPath}/free/delete/${article.articleId}" method="post" class="d-inline" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        <button type="submit" class="btn btn-danger">삭제</button>
+      </form>
+    </c:if>
+  </div>
+</div>
 
-    <div class="comments-section">
-        <h3>댓글 (${comments.size()})</h3>
-
-        <c:forEach var="comment" items="${comments}">
-            <div class="comment ${comment.parentId != null ? 'reply' : ''}">
-                <c:choose>
-                    <c:when test="${comment.deleted}">
-                        <div class="deleted-comment">삭제된 댓글입니다.</div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="comment-header">
-                            ${comment.nickname}
-                            <span class="comment-date">
-                                <fmt:formatDate value="${comment.createdAtAsDate}" pattern="yyyy-MM-dd HH:mm"/>
-                            </span>
-                            <c:if test="${sessionScope.loginUser.userId == comment.authorId}">
-                                <form action="${pageContext.request.contextPath}/free/comment/delete"
-                                      method="post" style="display: inline; float: right;"
-                                      onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
-                                    <input type="hidden" name="commentId" value="${comment.commentId}">
-                                    <input type="hidden" name="articleId" value="${article.articleId}">
-                                    <button type="submit" class="btn btn-danger" style="padding: 4px 8px; font-size: 12px;">삭제</button>
-                                </form>
-                            </c:if>
-                        </div>
-                        <div class="comment-content">${comment.content}</div>
-                        <c:if test="${sessionScope.loginUser.userId != 0 && comment.parentId == null}">
-                            <button onclick="showReplyForm(${comment.commentId})" class="btn btn-primary" style="margin-top: 5px; padding: 4px 8px; font-size: 12px;">답글</button>
-                            <div id="reply-form-${comment.commentId}" style="display: none; margin-top: 10px;">
-                                <form action="${pageContext.request.contextPath}/free/comment/write" method="post">
-                                    <input type="hidden" name="articleId" value="${article.articleId}">
-                                    <input type="hidden" name="parentId" value="${comment.commentId}">
-                                    <textarea name="content" rows="3" placeholder="답글을 입력하세요" required></textarea>
-                                    <button type="submit" class="btn btn-primary" style="margin-top: 5px;">답글 작성</button>
-                                </form>
-                            </div>
-                        </c:if>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-        </c:forEach>
-
-        <c:if test="${sessionScope.loginUser.userId != null}">
-            <div class="comment-form">
-                <h4>댓글 작성</h4>
-                <form action="${pageContext.request.contextPath}/free/comment/write" method="post">
-                    <input type="hidden" name="articleId" value="${article.articleId}">
-                    <textarea name="content" rows="4" placeholder="댓글을 입력하세요" required></textarea>
-                    <button type="submit" class="btn btn-primary" style="margin-top: 10px;">댓글 작성</button>
+<!-- 댓글 섹션 -->
+<div class="card shadow-sm">
+  <div class="card-header">
+    <h5 class="mb-0">댓글 (${comments.size()})</h5>
+  </div>
+  <div class="card-body">
+    <c:forEach var="comment" items="${comments}">
+      <div class="mb-3 p-3 rounded ${comment.parentId != null ? 'ms-4 bg-light' : 'bg-white border'}">
+        <c:choose>
+          <c:when test="${comment.deleted}">
+            <div class="text-muted fst-italic">삭제된 댓글입니다.</div>
+          </c:when>
+          <c:otherwise>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <div>
+                <strong>${comment.nickname}</strong>
+                <small class="text-muted ms-2">
+                  <fmt:formatDate value="${comment.createdAtAsDate}" pattern="yyyy-MM-dd HH:mm"/>
+                </small>
+              </div>
+              <c:if test="${sessionScope.loginUser.userId == comment.authorId}">
+                <form action="${pageContext.request.contextPath}/free/comment/delete" method="post" class="d-inline" onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+                  <input type="hidden" name="commentId" value="${comment.commentId}">
+                  <input type="hidden" name="articleId" value="${article.articleId}">
+                  <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
                 </form>
+              </c:if>
             </div>
-        </c:if>
-        <c:if test="${sessionScope.loginUser.userId == null}">
-            <div class="comment-form">
-                <p>댓글을 작성하려면 <a href="${pageContext.request.contextPath}/login">로그인</a>이 필요합니다.</p>
-            </div>
-        </c:if>
-    </div>
+            <div style="white-space: pre-wrap;">${comment.content}</div>
+            <c:if test="${sessionScope.loginUser.userId != null && comment.parentId == null}">
+              <button type="button" class="btn btn-outline-primary btn-sm mt-2" onclick="toggleReplyForm(${comment.commentId})">답글</button>
+              <div id="reply-form-${comment.commentId}" class="mt-2" style="display: none;">
+                <form action="${pageContext.request.contextPath}/free/comment/write" method="post">
+                  <input type="hidden" name="articleId" value="${article.articleId}">
+                  <input type="hidden" name="parentId" value="${comment.commentId}">
+                  <textarea name="content" class="form-control mb-2" rows="2" placeholder="답글을 입력하세요" required></textarea>
+                  <button type="submit" class="btn btn-primary btn-sm">답글 작성</button>
+                </form>
+              </div>
+            </c:if>
+          </c:otherwise>
+        </c:choose>
+      </div>
+    </c:forEach>
 
-    <script>
-        function showReplyForm(commentId) {
-          const form = document.getElementById('reply-form-' + commentId);
-          if (form.style.display === 'none') {
-            form.style.display = 'block';
-          } else {
-            form.style.display = 'none';
-          }
-        }
-    </script>
-</body>
-</html>
+    <c:if test="${empty comments}">
+      <div class="text-center text-muted py-4">첫 댓글을 남겨보세요!</div>
+    </c:if>
+
+    <!-- 댓글 작성 폼 -->
+    <c:if test="${sessionScope.loginUser.userId != null}">
+      <hr>
+      <h6 class="mb-3">댓글 작성</h6>
+      <form action="${pageContext.request.contextPath}/free/comment/write" method="post">
+        <input type="hidden" name="articleId" value="${article.articleId}">
+        <textarea name="content" class="form-control mb-2" rows="3" placeholder="댓글을 입력하세요" required></textarea>
+        <div class="text-end">
+          <button type="submit" class="btn btn-primary">댓글 작성</button>
+        </div>
+      </form>
+    </c:if>
+    <c:if test="${sessionScope.loginUser.userId == null}">
+      <hr>
+      <div class="text-center text-muted">
+        댓글을 작성하려면 <a href="${pageContext.request.contextPath}/user/login">로그인</a>이 필요합니다.
+      </div>
+    </c:if>
+  </div>
+</div>
+
+<script>
+function toggleReplyForm(commentId) {
+  const form = document.getElementById('reply-form-' + commentId);
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+
+<jsp:include page="../common/footer.jsp"/>

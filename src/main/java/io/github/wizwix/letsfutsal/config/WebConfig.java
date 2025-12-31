@@ -15,11 +15,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(
-    basePackages = "io.github.wizwix.letsfutsal",
-    useDefaultFilters = false,
-    includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class, RestController.class})
-)
+@ComponentScan(basePackages = "io.github.wizwix.letsfutsal", useDefaultFilters = false, includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = {Controller.class, RestController.class}))
 public class WebConfig implements WebMvcConfigurer {
   @Override
   public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {

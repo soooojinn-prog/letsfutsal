@@ -4,7 +4,10 @@
   <jsp:param name="title" value="팀 목록" />
   <jsp:param name="menu" value="team" />
 </jsp:include>
-<h2 class="fw-bold mb-4">팀 전체 목록</h2>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0">팀 전체 목록</h2>
+  <a href="${pageContext.request.contextPath}/team/create" class="btn btn-primary">팀 생성하기</a>
+</div>
 <c:choose>
   <c:when test="${empty teams}">
     <div class="alert alert-info">등록된 팀이 없습니다.</div>
@@ -49,7 +52,4 @@
     </div>
   </c:otherwise>
 </c:choose>
-<div class="mt-4">
-  <a href="${pageContext.request.contextPath}/team" class="btn btn-secondary">팀 메인으로</a>
-</div>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />

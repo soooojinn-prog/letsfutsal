@@ -1,0 +1,609 @@
+/* ========================================
+   렛츠풋살 다크 테마 - 공통 스타일
+   ======================================== */
+
+:root {
+  /* 배경 색상 */
+  --bg-primary: #121212;
+  --bg-secondary: #1E1E1E;
+  --bg-card: #282828;
+  --bg-card-hover: #333333;
+
+  /* 텍스트 색상 */
+  --text-primary: #FFFFFF;
+  --text-secondary: #B3B3B3;
+  --text-muted: #727272;
+
+  /* 포인트 색상 */
+  --accent-green: #1DB954;
+  --accent-green-hover: #1ED760;
+  --accent-orange: #E85D04;
+  --accent-orange-hover: #FF6B35;
+
+  /* 뱃지 색상 - 매치 타입 */
+  --badge-individual: #ffd2d7;
+  --badge-team: #ffc862;
+  --badge-rent: #c4b1d4;
+
+  /* 뱃지 색상 - 게시판 카테고리 */
+  --badge-notice: #ff6b6b;
+  --badge-review: #74c0fc;
+  --badge-impression: #69db7c;
+  --badge-recruit: #ffd43b;
+  --badge-trade: #da77f2;
+
+  /* 기타 */
+  --border-color: #333333;
+  --transition: all 0.2s ease;
+}
+
+/* ========================================
+   기본 스타일
+   ======================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans KR', sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--accent-green) !important;
+}
+
+/* ========================================
+   Bootstrap 오버라이드
+   ======================================== */
+.bg-white {
+  background-color: var(--bg-primary) !important;
+}
+
+.bg-light {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-dark {
+  background-color: var(--bg-secondary) !important;
+}
+
+.bg-primary {
+  background-color: var(--accent-green) !important;
+}
+
+.text-dark {
+  color: var(--text-primary) !important;
+}
+
+.text-muted {
+  color: var(--text-secondary) !important;
+}
+
+.text-white {
+  color: var(--text-primary) !important;
+}
+
+.text-primary {
+  color: var(--accent-green) !important;
+}
+
+.small, small {
+  color: var(--text-secondary);
+}
+
+hr {
+  border: none !important;
+  border-top: 1px solid var(--border-color) !important;
+  background-color: transparent !important;
+  opacity: 1 !important;
+  margin: 0 !important;
+}
+
+/* ========================================
+   헤더
+   ======================================== */
+header {
+  background-color: var(--bg-primary) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+header a {
+  color: var(--text-secondary) !important;
+}
+
+header a:hover {
+  color: var(--accent-green) !important;
+}
+
+header span {
+  color: var(--text-secondary) !important;
+}
+
+/* ========================================
+   네비게이션
+   ======================================== */
+nav {
+  background-color: var(--bg-secondary) !important;
+  border-bottom: 1px solid var(--border-color);
+}
+
+nav .nav-link {
+  color: var(--text-secondary) !important;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem !important;
+  border-radius: 50px !important;
+  transition: var(--transition);
+  margin: 0 0.25rem;
+}
+
+nav .nav-link:hover {
+  color: var(--text-primary) !important;
+  background-color: var(--bg-card) !important;
+}
+
+nav .nav-link.active,
+.nav-pills .nav-link.active {
+  background-color: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+  font-weight: 600;
+}
+
+/* ========================================
+   메인 콘텐츠
+   ======================================== */
+main {
+  background-color: var(--bg-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+}
+
+.fw-bold {
+  color: var(--text-primary) !important;
+}
+
+/* ========================================
+   카드
+   ======================================== */
+.card {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 12px !important;
+}
+
+.card-header {
+  background-color: var(--bg-card) !important;
+  border-bottom: 1px solid var(--border-color) !important;
+  color: var(--text-primary);
+}
+
+.card-header.bg-primary {
+  background-color: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+}
+
+.card-header.bg-warning {
+  background-color: var(--accent-orange) !important;
+  color: var(--bg-primary) !important;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.card-footer {
+  background-color: var(--bg-card) !important;
+  border-top: 1px solid var(--border-color) !important;
+}
+
+.card.shadow-sm {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ========================================
+   테이블
+   ======================================== */
+.table {
+  color: var(--text-primary) !important;
+}
+
+.table > :not(caption) > * > * {
+  background-color: var(--bg-card) !important;
+  border-bottom-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+}
+
+.table-hover > tbody > tr:hover > * {
+  background-color: var(--bg-card-hover) !important;
+}
+
+.table-dark,
+.table-dark > :not(caption) > * > * {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+thead.table-dark th {
+  background-color: var(--bg-secondary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+/* ========================================
+   폼 요소
+   ======================================== */
+.form-label {
+  color: var(--text-secondary) !important;
+  font-weight: 600;
+}
+
+.form-control {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px;
+}
+
+.form-control:focus {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--accent-green) !important;
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.25) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-control::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.form-select {
+  background-color: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 8px;
+}
+
+.form-select:focus {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--accent-green) !important;
+  box-shadow: 0 0 0 3px rgba(29, 185, 84, 0.25) !important;
+  color: var(--text-primary) !important;
+}
+
+.form-select option {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+textarea.form-control {
+  min-height: 120px;
+}
+
+.input-group-text {
+  background-color: var(--bg-card) !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+/* ========================================
+   버튼
+   ======================================== */
+.btn-primary {
+  background-color: var(--accent-green) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+  font-weight: 600;
+  border-radius: 50px;
+  transition: var(--transition);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-green-hover) !important;
+  border-color: var(--accent-green-hover) !important;
+  transform: scale(1.02);
+}
+
+.btn-secondary {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary) !important;
+  border-radius: 50px;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-card-hover) !important;
+  border-color: var(--text-secondary) !important;
+}
+
+.btn-warning {
+  background-color: var(--accent-orange) !important;
+  border-color: var(--accent-orange) !important;
+  color: var(--bg-primary) !important;
+  border-radius: 50px;
+}
+
+.btn-warning:hover {
+  background-color: var(--accent-orange-hover) !important;
+  border-color: var(--accent-orange-hover) !important;
+}
+
+.btn-danger {
+  background-color: #dc3545 !important;
+  border-color: #dc3545 !important;
+  border-radius: 50px;
+}
+
+.btn-danger:hover {
+  background-color: #bb2d3b !important;
+}
+
+.btn-outline-secondary {
+  background-color: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  border-radius: 50px;
+}
+
+.btn-outline-secondary:hover {
+  background-color: var(--bg-card-hover) !important;
+  border-color: var(--text-secondary) !important;
+  color: var(--text-primary) !important;
+}
+
+.btn-outline-primary {
+  background-color: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  border-radius: 50px;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--bg-card-hover) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--accent-green) !important;
+}
+
+.btn-outline-danger {
+  border-radius: 50px;
+}
+
+.btn-check:checked + .btn-outline-primary,
+.btn-check:checked + .btn-outline-secondary {
+  background-color: var(--accent-green) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* ========================================
+   뱃지
+   ======================================== */
+.badge {
+  font-weight: 600;
+  padding: 0.375rem 0.75rem;
+  border-radius: 50px;
+}
+
+.badge.bg-primary {
+  background-color: var(--accent-green) !important;
+}
+
+.badge.bg-secondary {
+  background-color: var(--bg-card-hover) !important;
+  color: var(--text-primary) !important;
+}
+
+.badge.bg-info {
+  background-color: var(--badge-individual) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--badge-team) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge.bg-success {
+  background-color: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.badge.bg-light {
+  background-color: var(--bg-card) !important;
+  color: var(--text-primary) !important;
+}
+
+/* 게시판 카테고리 뱃지 */
+.badge-category-notice {
+  background-color: var(--badge-notice) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge-category-review {
+  background-color: var(--badge-review) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge-category-impression {
+  background-color: var(--badge-impression) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge-category-recruit {
+  background-color: var(--badge-recruit) !important;
+  color: var(--bg-primary) !important;
+}
+
+.badge-category-trade {
+  background-color: var(--badge-trade) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* ========================================
+   알림/Alert
+   ======================================== */
+.alert {
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.alert-info {
+  background-color: rgba(29, 185, 84, 0.1) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--text-primary) !important;
+}
+
+.alert-secondary {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1) !important;
+  border-color: #dc3545 !important;
+  color: var(--text-primary) !important;
+}
+
+/* ========================================
+   페이지네이션
+   ======================================== */
+.pagination .page-link {
+  background-color: var(--bg-card) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-secondary) !important;
+  transition: var(--transition);
+}
+
+.pagination .page-link:hover {
+  background-color: var(--bg-card-hover) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--accent-green) !important;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--accent-green) !important;
+  border-color: var(--accent-green) !important;
+  color: var(--bg-primary) !important;
+}
+
+/* ========================================
+   프로그레스 바
+   ======================================== */
+.progress {
+  background-color: var(--bg-secondary) !important;
+  border-radius: 50px;
+}
+
+.progress-bar {
+  background-color: var(--accent-green) !important;
+}
+
+/* ========================================
+   네비게이션 탭
+   ======================================== */
+.nav-tabs {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.nav-tabs .nav-link {
+  color: var(--text-secondary) !important;
+  border: none !important;
+  border-bottom: 2px solid transparent !important;
+  border-radius: 0 !important;
+  padding: 0.75rem 1.25rem !important;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: transparent transparent var(--text-muted) transparent !important;
+  color: var(--text-primary) !important;
+  background-color: transparent !important;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: transparent !important;
+  border-color: transparent transparent var(--accent-green) transparent !important;
+  color: var(--accent-green) !important;
+  font-weight: 600;
+}
+
+/* ========================================
+   테두리/구분선
+   ======================================== */
+.border {
+  border-color: var(--border-color) !important;
+}
+
+.border-bottom {
+  border-bottom-color: var(--border-color) !important;
+}
+
+/* ========================================
+   푸터
+   ======================================== */
+footer {
+  background-color: var(--bg-secondary) !important;
+  border-top: 1px solid var(--border-color);
+}
+
+footer p {
+  color: var(--text-secondary) !important;
+}
+
+/* ========================================
+   스피너
+   ======================================== */
+.spinner-border.text-primary {
+  color: var(--accent-green) !important;
+}
+
+/* ========================================
+   스크롤바
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* ========================================
+   반응형
+   ======================================== */
+@media (max-width: 768px) {
+  h1, h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  nav .nav-link {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.875rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+}

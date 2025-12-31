@@ -9,15 +9,15 @@
   <title>${param.title} - 렛츠풋살</title>
   <script>const contextPath = '${pageContext.request.contextPath}';</script>
   <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/style/bootstrap/bootstrap.min.css"/>
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/style/common/theme.css"/>
 </head>
 <body>
   <!-- 헤더 -->
-  <header class="py-2 bg-white">
-    <div class="container">
+  <header>
+    <div class="container py-2">
       <div class="d-flex align-items-center justify-content-between">
         <!-- 로고 -->
         <a href="${pageContext.request.contextPath}/" class="d-inline-flex align-items-center text-decoration-none">
-          <%--suppress CheckImageSize --%>
           <img src="${pageContext.request.contextPath}/resources/image/logo/logo.png" height="44" alt="렛츠풋살 로고">
         </a>
         <!-- 회원 링크 -->
@@ -25,45 +25,43 @@
           <c:choose>
             <%--@elvariable id="loginUser" type="io.github.wizwix.letsfutsal.dto.UserDTO"--%>
             <c:when test="${not empty loginUser}">
-              <span class="text-muted small">${loginUser.nickname}님</span>
-              <span class="mx-1 text-muted">|</span>
-              <a href="${pageContext.request.contextPath}/user/logout" class="text-decoration-none small">로그아웃</a>
-              <span class="mx-1 text-muted">|</span>
-              <a href="${pageContext.request.contextPath}/user/mypage" class="text-decoration-none small">마이페이지</a>
+              <span class="small">${loginUser.nickname}님 환영합니다</span>
+              <span class="mx-2 text-muted">|</span>
+              <a href="${pageContext.request.contextPath}/user/logout" class="small">로그아웃</a>
+              <span class="mx-2 text-muted">|</span>
+              <a href="${pageContext.request.contextPath}/user/mypage" class="small">마이페이지</a>
             </c:when>
             <c:otherwise>
-              <a href="${pageContext.request.contextPath}/user/login" class="text-decoration-none small">로그인</a>
-              <span class="mx-1 text-muted">|</span>
-              <a href="${pageContext.request.contextPath}/user/register" class="text-decoration-none small">회원가입</a>
+              <a href="${pageContext.request.contextPath}/user/login" class="small">로그인</a>
+              <span class="mx-2 text-muted">|</span>
+              <a href="${pageContext.request.contextPath}/user/register" class="small">회원가입</a>
             </c:otherwise>
           </c:choose>
         </div>
       </div>
     </div>
   </header>
-  <hr class="m-0">
   <!-- 네비게이션 -->
-  <nav class="bg-light">
+  <nav>
     <div class="container">
-      <ul class="nav nav-pills justify-content-center py-2 gap-2">
+      <ul class="nav justify-content-center py-2">
         <li class="nav-item">
-          <a class="btn ${param.menu == 'match' ? 'btn-primary' : 'btn-outline-primary'}" href="${pageContext.request.contextPath}/match">매치</a>
+          <a class="nav-link ${param.menu == 'match' ? 'active' : ''}" href="${pageContext.request.contextPath}/match">매치</a>
         </li>
         <li class="nav-item">
-          <a class="btn ${param.menu == 'team' ? 'btn-primary' : 'btn-outline-primary'}" href="${pageContext.request.contextPath}/team">팀</a>
+          <a class="nav-link ${param.menu == 'team' ? 'active' : ''}" href="${pageContext.request.contextPath}/team">팀</a>
         </li>
         <li class="nav-item">
-          <a class="btn ${param.menu == 'stadium' ? 'btn-primary' : 'btn-outline-primary'}" href="${pageContext.request.contextPath}/stadium">구장</a>
+          <a class="nav-link ${param.menu == 'stadium' ? 'active' : ''}" href="${pageContext.request.contextPath}/stadium">구장</a>
         </li>
         <li class="nav-item">
-          <a class="btn ${param.menu == 'rank' ? 'btn-primary' : 'btn-outline-primary'}" href="${pageContext.request.contextPath}/rank">랭킹</a>
+          <a class="nav-link ${param.menu == 'rank' ? 'active' : ''}" href="${pageContext.request.contextPath}/rank">랭킹</a>
         </li>
         <li class="nav-item">
-          <a class="btn ${param.menu == 'free' ? 'btn-primary' : 'btn-outline-primary'}" href="${pageContext.request.contextPath}/free">게시판</a>
+          <a class="nav-link ${param.menu == 'board' ? 'active' : ''}" href="${pageContext.request.contextPath}/free">게시판</a>
         </li>
       </ul>
     </div>
   </nav>
-  <hr class="m-0">
   <!-- 메인 콘텐츠 시작 -->
   <main class="container py-4">

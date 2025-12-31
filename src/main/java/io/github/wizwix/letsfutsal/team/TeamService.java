@@ -2,7 +2,6 @@ package io.github.wizwix.letsfutsal.team;
 
 import io.github.wizwix.letsfutsal.dto.TeamDTO;
 import io.github.wizwix.letsfutsal.mapper.TeamMapper;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

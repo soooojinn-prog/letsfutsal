@@ -1,175 +1,121 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>자유 게시판</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-    }
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+<jsp:include page="../common/header.jsp">
+  <jsp:param name="title" value="자유게시판"/>
+  <jsp:param name="menu" value="board"/>
+</jsp:include>
 
-    h1 {
-      color: #333;
-    }
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="fw-bold mb-0">자유게시판</h2>
+  <a href="${pageContext.request.contextPath}/free/write" class="btn btn-primary">글쓰기</a>
+</div>
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 12px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    tr:hover {
-      background-color: #f5f5f5;
-    }
-
-    .pagination {
-      margin: 20px 0;
-      text-align: center;
-    }
-
-    .pagination a {
-      padding: 8px 16px;
-      margin: 0 4px;
-      border: 1px solid #ddd;
-      text-decoration: none;
-      color: #333;
-    }
-
-    .pagination a.active {
-      background-color: #4CAF50;
-      color: white;
-    }
-
-    .pagination a:hover:not(.active) {
-      background-color: #ddd;
-    }
-
-    .search-form {
-      margin: 20px 0;
-    }
-
-    .search-form input[type="text"] {
-      padding: 8px;
-      width: 200px;
-    }
-
-    .search-form button {
-      padding: 8px 16px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .write-btn {
-      float: right;
-      padding: 10px 20px;
-      background-color: #008CBA;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-    }
-
-    .title-link {
-      text-decoration: none;
-      color: #333;
-    }
-
-    .title-link:hover {
-      color: #4CAF50;
-    }
-  </style>
-</head>
-<body>
-  <h1>자유 게시판</h1>
-  <a href="${pageContext.request.contextPath}/free/write" class="write-btn">글쓰기</a>
-  <div style="clear:both;"></div>
-
-  <table>
-    <thead>
-      <tr>
-        <th width="8%">번호</th>
-        <th width="12%">카테고리</th>
-        <th width="40%">제목</th>
-        <th width="12%">작성자</th>
-        <th width="15%">작성일</th>
-        <th width="8%">조회수</th>
-      </tr>
-    </thead>
-    <tbody>
-      <c:forEach var="article" items="${articles}">
+<!-- 게시글 목록 -->
+<div class="card shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-dark">
         <tr>
-          <td>${article.articleId}</td>
-          <td>${article.cateName}</td>
-          <td><a href="${pageContext.request.contextPath}/free/view/${article.articleId}" class="title-link">${article.title}</a></td>
-          <td>${article.authorNickname}</td>
-          <td><fmt:formatDate value="${article.createdAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
-          <td>${article.views}</td>
+          <th width="8%">번호</th>
+          <th width="12%">카테고리</th>
+          <th width="40%">제목</th>
+          <th width="12%">작성자</th>
+          <th width="15%">작성일</th>
+          <th width="8%">조회수</th>
         </tr>
-      </c:forEach>
-      <c:if test="${empty articles}">
-        <tr>
-          <td colspan="6" style="text-align: center;">게시글이 없습니다.</td>
-        </tr>
-      </c:if>
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        <c:forEach var="article" items="${articles}">
+          <tr>
+            <td>${article.articleId}</td>
+            <td>
+              <c:choose>
+                <c:when test="${article.cateName == '공지사항'}"><span class="badge badge-category-notice">${article.cateName}</span></c:when>
+                <c:when test="${article.cateName == '구장 리뷰'}"><span class="badge badge-category-review">${article.cateName}</span></c:when>
+                <c:when test="${article.cateName == '경기 소감'}"><span class="badge badge-category-impression">${article.cateName}</span></c:when>
+                <c:when test="${article.cateName == '팀원 모집'}"><span class="badge badge-category-recruit">${article.cateName}</span></c:when>
+                <c:when test="${article.cateName == '중고 거래'}"><span class="badge badge-category-trade">${article.cateName}</span></c:when>
+                <c:otherwise><span class="badge bg-secondary">${article.cateName}</span></c:otherwise>
+              </c:choose>
+            </td>
+            <td>
+              <a href="${pageContext.request.contextPath}/free/view/${article.articleId}" class="text-decoration-none text-dark">
+                ${article.title}
+              </a>
+            </td>
+            <td>${article.authorNickname}</td>
+            <td><fmt:formatDate value="${article.createdAtAsDate}" pattern="yyyy-MM-dd HH:mm"/></td>
+            <td>${article.views}</td>
+          </tr>
+        </c:forEach>
+        <c:if test="${empty articles}">
+          <tr>
+            <td colspan="6" class="text-center py-4 text-muted">게시글이 없습니다.</td>
+          </tr>
+        </c:if>
+      </tbody>
+    </table>
+  </div>
+</div>
 
-  <div class="pagination">
+<!-- 페이지네이션 -->
+<nav class="mt-4">
+  <ul class="pagination justify-content-center">
     <c:if test="${currentPage > 1}">
-      <c:choose>
-        <c:when test="${currentPage == 2}">
-          <a href="${pageContext.request.contextPath}/free">&laquo; 이전</a>
-        </c:when>
-        <c:otherwise>
-          <a href="${pageContext.request.contextPath}/free/page/${currentPage - 1}">&laquo; 이전</a>
-        </c:otherwise>
-      </c:choose>
+      <li class="page-item">
+        <c:choose>
+          <c:when test="${currentPage == 2}">
+            <a class="page-link" href="${pageContext.request.contextPath}/free">&laquo; 이전</a>
+          </c:when>
+          <c:otherwise>
+            <a class="page-link" href="${pageContext.request.contextPath}/free/page/${currentPage - 1}">&laquo; 이전</a>
+          </c:otherwise>
+        </c:choose>
+      </li>
     </c:if>
 
     <c:forEach begin="1" end="${totalPages}" var="i">
-      <c:choose>
-        <c:when test="${i == 1}">
-          <a href="${pageContext.request.contextPath}/free" class="${currentPage == i ? 'active' : ''}">${i}</a>
-        </c:when>
-        <c:otherwise>
-          <a href="${pageContext.request.contextPath}/free/page/${i}" class="${currentPage == i ? 'active' : ''}">${i}</a>
-        </c:otherwise>
-      </c:choose>
+      <li class="page-item ${currentPage == i ? 'active' : ''}">
+        <c:choose>
+          <c:when test="${i == 1}">
+            <a class="page-link" href="${pageContext.request.contextPath}/free">${i}</a>
+          </c:when>
+          <c:otherwise>
+            <a class="page-link" href="${pageContext.request.contextPath}/free/page/${i}">${i}</a>
+          </c:otherwise>
+        </c:choose>
+      </li>
     </c:forEach>
 
     <c:if test="${currentPage < totalPages}">
-      <a href="${pageContext.request.contextPath}/free/page/${currentPage + 1}">다음 &raquo;</a>
+      <li class="page-item">
+        <a class="page-link" href="${pageContext.request.contextPath}/free/page/${currentPage + 1}">다음 &raquo;</a>
+      </li>
     </c:if>
-  </div>
-  <div class="search-form">
-    <form action="${pageContext.request.contextPath}/free/search" method="get">
-      <label>
-        <select name="searchType">
-          <option value="comment">댓글 내용</option>
+  </ul>
+</nav>
+
+<!-- 검색 -->
+<div class="card mt-4">
+  <div class="card-body">
+    <form action="${pageContext.request.contextPath}/free/search" method="get" class="row g-2 justify-content-center">
+      <div class="col-auto">
+        <select name="searchType" class="form-select">
+          <option value="title">제목</option>
           <option value="content">내용</option>
           <option value="nickname">닉네임</option>
-          <option value="title">제목</option>
+          <option value="comment">댓글 내용</option>
         </select>
-      </label>
-      <label><input name="query"/></label>
-      <button type="submit">검색</button>
+      </div>
+      <div class="col-auto">
+        <input type="text" name="query" class="form-control" placeholder="검색어 입력" required>
+      </div>
+      <div class="col-auto">
+        <button type="submit" class="btn btn-primary">검색</button>
+      </div>
     </form>
   </div>
-</body>
-</html>
+</div>
+
+<jsp:include page="../common/footer.jsp"/>

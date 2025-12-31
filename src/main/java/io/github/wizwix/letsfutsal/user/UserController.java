@@ -2,8 +2,6 @@ package io.github.wizwix.letsfutsal.user;
 
 import io.github.wizwix.letsfutsal.dto.UserDTO;
 import jakarta.servlet.http.HttpSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

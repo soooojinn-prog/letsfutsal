@@ -60,10 +60,10 @@
         and m.gender = #{gender}
       </if>
       <if test="minGrade != null">
-        and m.min_grade &lt;= #{minGrade} and m.max_grade &gt;= #{minGrade}
+        and m.min_grade >= #{minGrade}
       </if>
       <if test="maxGrade != null">
-        and m.min_grade &lt;= #{maxGrade} and m.max_grade &gt;= #{maxGrade}
+        and m.min_grade &lt;= #{maxGrade}
       </if>
       <if test="status != null">
         and m.status >= #{status}

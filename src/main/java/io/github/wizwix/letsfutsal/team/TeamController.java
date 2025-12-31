@@ -54,11 +54,12 @@ public class TeamController {
     return "team/list";
   }
 
-  // 메인
+  // 메인 (팀 목록으로 바로 이동)
   @SuppressWarnings("ConfusingMainMethod")
   @GetMapping("")
-  public String main() {
-    return "team/main";
+  public String main(Model model) {
+    model.addAttribute("teams", service.list());
+    return "team/list";
   }
 
   // 팀 개별 페이지
