@@ -17,7 +17,8 @@ public class TeamService {
   }
 
   public TeamDTO get(long teamId) {
-    return teamMapper.selectTeamById(teamId);
+    //return teamMapper.selectTeamById(teamId);
+    return teamMapper.selectTeamWithLeader(teamId);
   }
 
   public TeamDTO getget(long teamId) {
